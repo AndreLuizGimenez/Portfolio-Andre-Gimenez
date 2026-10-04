@@ -1,0 +1,110 @@
+/* Tela inicial de carregamento: oculta a página enquanto os recursos são preparados, desenha o progresso e faz a saída.
+ * O seletor de irmãos conecta o loader à página; a variante de movimento reduzido evita animações desnecessárias. */
+/* The first paint is complete even before client hydration. */
+/* Carregamento inicial: apresentação do progresso e transição de saída. */
+/* Keep gestures locked through the entire fade. The scene and its scroll
+   measurements must be in place before the visitor can leave the first page. */
+html:has(.site-loader) {
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: none;
+  background: #162f3e;
+}
+html:has(.site-loader) body {
+  background: #162f3e;
+}
+
+.site-loader:not(.is-leaving) ~ .nival-page {
+  visibility: hidden;
+}
+
+.site-loader ~ .nival-page {
+  pointer-events: none;
+}
+
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: max(32px, env(safe-area-inset-top)) 24px max(32px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  isolation: isolate;
+  touch-action: none;
+  overscroll-behavior: contain;
+  color: #f7fafb;
+  background:
+    radial-gradient(ellipse 75% 48% at 50% 42%, #315268 0%, transparent 100%),
+    linear-gradient(150deg, #19384a 0%, #122b3a 61%, #0e2533 100%);
+  transition: opacity .6s ease, visibility .6s ease;
+}
+
+.site-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: .4;
+  background: radial-gradient(ellipse 42% 28% at 50% 46%, #86acc622 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.site-loader.is-leaving {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.site-loader-content {
+  position: relative;
+  width: min(100%, 360px);
+  text-align: center;
+}
+
+.site-loader-eyebrow {
+  margin: 0 0 18px;
+  color: #c7d7df;
+  font: 500 11px/1.4 'DM Sans', Arial, sans-serif;
+  letter-spacing: .23em;
+}
+
+.site-loader-brand {
+  margin: 0 0 54px;
+  font: 550 clamp(56px, 12vw, 84px)/1 Manrope, Arial, sans-serif;
+  letter-spacing: -.075em;
+}
+
+.site-loader-progress {
+  width: min(100%, 260px);
+  height: 2px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #d5e8f23d;
+}
+
+.site-loader-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #e5f5fb;
+  box-shadow: 0 0 10px #c5e9ff88;
+  transition: width .35s ease;
+}
+
+.site-loader-caption {
+  display: flex;
+  justify-content: space-between;
+  width: min(100%, 260px);
+  margin: 14px auto 0;
+  color: #c0d0d8;
+  font: 400 11px/1.4 'DM Sans', Arial, sans-serif;
+  letter-spacing: .025em;
+}
+
+/* Adaptação condicional ((prefers-reduced-motion: reduce)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media (prefers-reduced-motion: reduce) {
+  .site-loader,
+  .site-loader-progress span { transition: none; }
+}

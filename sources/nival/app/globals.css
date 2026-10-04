@@ -1,0 +1,147 @@
+/* Base visual: utilitários Tailwind, tokens de cor, tipografia, botões e composição geral.
+ * Este arquivo contém ajustes sucessivos do design; a última regra compatível pode substituir uma anterior.
+ * Leia também experience.css e purchase.css antes de mudar seletores compartilhados. */
+@import "tailwindcss" source(none);
+/* Generate utilities for the live page, not unused starter components. */
+@source "./";
+@source "../components/ui/accordion.tsx";
+@source "../components/ui/carousel.tsx";
+@source "../components/ui/dialog.tsx";
+:root,.dark{color-scheme:dark;--background:#111c24;--foreground:#f1f6f8;--card:#182731;--card-foreground:#f1f6f8;--popover:#1b2c37;--popover-foreground:#f1f6f8;--primary:#c6eaf0;--primary-foreground:#152831;--secondary:#243842;--secondary-foreground:#f1f6f8;--muted:#243842;--muted-foreground:#a9bdc6;--accent:#bfdfe7;--accent-foreground:#152831;--destructive:#e99a8f;--border:#ffffff20;--input:#ffffff20;--ring:#bce5ef;--radius:1rem}
+@theme inline{--color-background:var(--background);--color-foreground:var(--foreground);--color-card:var(--card);--color-card-foreground:var(--card-foreground);--color-popover:var(--popover);--color-popover-foreground:var(--popover-foreground);--color-primary:var(--primary);--color-primary-foreground:var(--primary-foreground);--color-secondary:var(--secondary);--color-secondary-foreground:var(--secondary-foreground);--color-muted:var(--muted);--color-muted-foreground:var(--muted-foreground);--color-accent:var(--accent);--color-accent-foreground:var(--accent-foreground);--color-destructive:var(--destructive);--color-border:var(--border);--color-input:var(--input);--color-ring:var(--ring);--radius-sm:calc(var(--radius) - 4px);--radius-md:calc(var(--radius) - 2px);--radius-lg:var(--radius);--radius-xl:calc(var(--radius) + 4px);--font-sans:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:95px}body{margin:0;background:var(--background);color:var(--foreground);font-family:Arial,Helvetica,sans-serif;-webkit-font-smoothing:antialiased}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer;font:inherit}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #c8edf3;outline-offset:6px}.site-header{position:absolute;left:0;right:0;top:0;z-index:30;height:92px;padding:0 5%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12}.wordmark{font-size:36px;letter-spacing:-2px;font-weight:500}.wordmark span{font-size:12px;vertical-align:super;padding-left:4px;letter-spacing:0}.site-header nav{display:flex;align-items:center;gap:35px;font-size:14px;color:#bbccd3}/* Abertura do site: composição do título, fotografia, botão e chamada para continuar. */
+.hero{position:relative;min-height:900px;height:100svh;max-height:1100px;text-align:center;overflow:hidden;background:#111c24}.hero-copy{padding:145px 24px 0;position:relative;z-index:3;pointer-events:none}.hero-copy a{pointer-events:auto}.eyebrow{font-size:12px;font-weight:500;letter-spacing:.18em;color:#bbd0d7;margin:0 0 22px}h1{font-size:clamp(48px,5.6vw,82px);font-weight:400;line-height:1.04;letter-spacing:-.065em;margin:0}h1 span{color:#bbd8e2}.hero-description{font-size:16px;line-height:1.65;color:#b2c5ce;margin:22px auto}/* Base dos botões: dimensões, aparência e resposta à interação. */
+.button{display:inline-flex;gap:28px;align-items:center;justify-content:center;padding:17px 24px;font-size:14px;font-weight:500;border-radius:100px;border:1px solid transparent;transition:background .25s,transform .25s}.button-primary{background:#d2edf2;color:#172b34}.button:hover{transform:translateY(-2px);background:#e3f6fa}.hero-visual{position:absolute;left:50%;transform:translateX(-50%);bottom:3%;width:min(1050px,83vw);mask-image:linear-gradient(to bottom,transparent 0,#000 14%,#000 77%,transparent 100%);pointer-events:none}.hero-visual img{width:100%;height:auto;display:block;mix-blend-mode:lighten}.hero-foot{position:absolute;bottom:28px;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;gap:20px;font-size:10px;letter-spacing:.13em;color:#b0c0c8;z-index:5}.hero-foot a{font-size:12px;letter-spacing:.02em}h2{font-weight:400;font-size:clamp(36px,4.8vw,68px);line-height:1.07;letter-spacing:-.055em}
+/* Adaptação condicional ((max-width:640px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(max-width:640px){.site-header{height:78px;padding:0 22px}.site-header nav>a:first-child{display:none}.wordmark{font-size:31px}.hero{min-height:770px;height:100svh}.hero-copy{padding-top:133px}.hero-description{font-size:15px}.hero-visual{width:125vw;bottom:9%}.hero-foot{justify-content:center}.hero-foot>span{display:none}.hero-foot>a{font-size:12px}}
+/* Adaptação condicional ((prefers-reduced-motion:reduce)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Mobile composition is the base; desktop adds space, not extra interactions. */
+.section-width{width:min(1220px,calc(100% - 48px));margin-inline:auto}
+.skip-link{position:fixed;top:-70px;left:15px;z-index:100;background:#e4f4f7;color:#142630;padding:14px 22px;border-radius:40px}.skip-link:focus{top:15px}
+.hero-foot a, .text-link{display:inline-flex;align-items:center;gap:12px}.site-header nav>a:not(.header-cta){display:none}
+.hero{min-height:780px;max-height:none;height:100svh}.hero-copy{padding-top:135px}.hero-copy h1{font-size:clamp(43px,10.5vw,65px)}.hero-description{font-size:15px}.hero-visual{width:132vw;max-width:870px;bottom:8%;mask-image:radial-gradient(ellipse at 50% 50%,#000 33%,transparent 73%)}.hero-visual img{mix-blend-mode:normal}.hero-foot{bottom:35px;justify-content:center}.hero-foot>span{display:none}
+/* História das camadas: palco visual, fundo, modelo, textos e estados de apresentação. */
+.story{position:relative;isolation:isolate;scroll-margin-top:0}.story-stage{position:relative;overflow:hidden}.story-top{padding:30px 24px 0;position:relative;z-index:3;display:flex;justify-content:space-between}.story-top .eyebrow{font-size:10px;letter-spacing:.14em}.story-top>span{display:none}.story-poster{width:100%;margin:0 auto}.story-poster img{display:block;width:100%;height:auto;object-fit:contain}.story-scene{display:none}.story-steps{padding:0 24px 10px}.story-chapter{padding:32px 0;border-bottom:1px solid #ffffff14}.layer-index{font-size:10px;color:#97c9d9;letter-spacing:.12em;margin:0 0 18px}.story-chapter h2{font-size:38px;margin:0 0 22px;letter-spacing:-.052em;line-height:1.1}.chapter-description{font-size:15px;line-height:1.75;color:#afc3cd;max-width:390px;margin:0 0 22px}.text-link{font-size:14px;color:#d2e9f1}.text-link svg{transition:transform .2s}.text-link:hover svg{transform:translate(2px,-2px)}.story-bottom{padding:30px 24px 48px;position:relative}.story-bottom>p{font-size:11px;line-height:1.6;color:#9eB5bf;max-width:260px;margin:18px 0 0}.story-dots{display:none}.story-progress{display:none}
+.story.is-enhanced{height:380svh}.is-enhanced .story-stage{height:100svh;min-height:710px;position:sticky;top:0}.is-enhanced .story-scene{display:block;position:absolute;top:3%;height:47%;width:115%;left:-7.5%;z-index:1}.story-scene canvas{display:block;width:100%;height:100%;touch-action:pan-y;pointer-events:none}.is-enhanced .story-poster{display:none}.is-enhanced .story-steps{position:absolute;top:48%;bottom:100px;left:0;right:0;padding:0 25px;z-index:2;pointer-events:none}.is-enhanced .story-chapter{position:absolute;inset:0 25px auto;padding:0;opacity:0;transform:translateY(15px);transition:opacity .45s,transform .6s;pointer-events:none;border:0}.is-enhanced .story-chapter.is-active{opacity:1;transform:translateY(0);pointer-events:auto}.is-enhanced .story-chapter h2{font-size:clamp(30px,8.5vw,44px);margin-bottom:16px}.is-enhanced .layer-index{margin-bottom:14px}.is-enhanced .chapter-description{font-size:14px;line-height:1.7;margin-bottom:15px;max-width:350px}.is-enhanced .story-bottom{position:absolute;left:0;right:0;bottom:84px;padding:0 25px;z-index:3;pointer-events:none}.is-enhanced .story-bottom>p{font-size:10px;margin:0;max-width:none;color:#91aeba}.story-progress{height:1px;background:#ffffff18;position:absolute;left:25px;right:25px;bottom:-18px}.is-enhanced .story-progress{display:block}.story-progress-fill{height:100%;background:#bfdfeb;transform:scaleX(0);transform-origin:left}
+/* Compra: organização do produto, preço, variante e ações. */
+.offer{padding-block:95px 70px;display:grid;gap:48px;scroll-margin-top:24px}.offer-photo{background:#162630;border:1px solid #ffffff0b;min-width:0;padding-top:30px;position:relative;border-radius:3px;overflow:hidden}.offer-photo>.eyebrow{padding-left:25px;font-size:10px}.offer-photo img{display:block;width:118%;max-width:none;margin-left:-9%;mask-image:radial-gradient(ellipse at 50% 50%,#000 35%,transparent 70%);aspect-ratio:1.5;object-fit:cover}.offer-photo>span{display:block;padding:12px 25px 25px;font-size:10px;letter-spacing:.12em;color:#a6bdc9}.offer-details h2{font-size:52px;margin:0 0 28px}.price{font-size:36px;letter-spacing:-.04em;margin:0 0 5px}.purchase-button{width:100%;justify-content:space-between}
+/* Perguntas e respostas: disposição e leitura das informações do produto. */
+.faq{padding-block:50px 95px;display:grid;gap:30px}.faq h2{font-size:43px;margin:0}.faq-list{min-width:0}.faq-question{font-size:16px;font-weight:400;padding:23px 0;line-height:1.5;gap:20px;letter-spacing:-.015em}.faq-question:hover{text-decoration:none;color:#baddE9}.faq-question svg{margin-top:4px}.faq-answer{font-size:14px;line-height:1.85;color:#a9c0cc;padding-bottom:25px;max-width:600px}/* Rodapé: identificação, avisos e navegação de retorno. */
+.footer{border-top:1px solid #ffffff1d;padding-top:35px;padding-bottom:115px}.footer-main{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:23px}.footer-main>p{width:100%;order:3;color:#aec4ce;font-size:15px;margin:0 0 28px}.footer .wordmark{font-size:41px}.footer-meta{display:flex;flex-direction:column;gap:8px;padding-top:25px;border-top:1px solid #ffffff14}.footer-meta p{font-size:11px;margin:0;color:#7f9cae}/* CTA da história: posição flutuante e visibilidade coordenadas pelo JavaScript. */
+.sticky-buy{position:fixed;bottom:max(20px,env(safe-area-inset-bottom));right:16px;z-index:34;background:#d1ebf1;color:#162b36;border-radius:50px;padding:4px 6px 4px 18px;display:flex;align-items:center;gap:18px;transform:translateY(100px);opacity:0;transition:transform .35s,opacity .35s;pointer-events:none;box-shadow:0 8px 30px #07162233}.sticky-buy.is-visible{left:50%;right:auto;top:var(--story-cta-top,auto);bottom:auto;transform:translate(-50%,0);opacity:1;pointer-events:auto}.sticky-buy>div{display:none}.sticky-buy>a{display:inline-flex;align-items:center;gap:12px;min-height:36px;font-size:13px;padding-right:9px}.sticky-buy>div>span{font-size:13px;display:block}.sticky-buy small{font-size:10px;color:#4f707e;display:block;margin-top:3px}.dialog-title{font-size:33px;letter-spacing:-.05em;font-weight:400;line-height:1.1}.dialog-description{font-size:14px;line-height:1.6;color:#a8c2cd}
+/* Adaptação condicional ((min-width:600px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(min-width:600px){.section-width{width:min(1220px,calc(100% - 80px))}.hero-copy{padding-top:150px}.hero-copy h1{font-size:68px}.hero-visual{width:100%;bottom:1%;max-width:870px}.hero{min-height:980px}.is-enhanced .story-steps{top:53%;left:5%;right:5%}.is-enhanced .story-chapter h2{font-size:42px}.is-enhanced .chapter-description{max-width:480px}.is-enhanced .story-scene{height:55%;top:0;width:90%;left:5%}.is-enhanced .story-bottom{left:5%;right:5%}.offer{grid-template-columns:1fr 1fr;gap:40px;align-items:center}.offer-photo{align-self:stretch;display:flex;flex-direction:column;justify-content:space-between}.offer-photo img{width:150%;margin-left:-25%}.offer-details h2{font-size:48px}.faq{grid-template-columns:.85fr 1.15fr;gap:50px}.sticky-buy{right:25px;padding:10px 12px 10px 20px}.sticky-buy>div{display:block}.sticky-buy>a{padding:0 13px;border-left:1px solid #162b3620}.footer-main>p{width:auto;order:0;margin:0}.footer-meta{flex-direction:row;justify-content:space-between;margin-top:35px}}
+/* Adaptação condicional ((min-width:1024px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(min-width:1024px){.site-header{height:95px}.site-header nav>a:not(.header-cta){display:block}.hero{height:1050px;min-height:900px;max-height:1150px}.hero-copy{padding-top:154px}.hero-copy h1{font-size:82px}.hero-description{font-size:17px;margin-block:23px}.hero-visual{width:1000px;max-width:none;bottom:15px}.hero-foot{justify-content:space-between;bottom:36px}.hero-foot>span{display:block;font-size:11px}.story.is-enhanced{height:400svh}.is-enhanced .story-stage{min-height:700px;height:100svh;max-height:1200px}.story-top{padding:45px 5% 0}.story-top .eyebrow{font-size:12px}.story-top>span{display:flex;gap:12px;font-size:10px;letter-spacing:.1em;color:#8daebb}.is-enhanced .story-scene{left:38%;width:65%;top:7%;height:78%}.is-enhanced .story-steps{top:31%;left:5%;width:38%;right:auto;bottom:130px;padding:0}.is-enhanced .story-chapter{inset:0}.is-enhanced .story-chapter h2{font-size:clamp(40px,4.2vw,62px);margin-bottom:25px}.is-enhanced .layer-index{font-size:11px;margin-bottom:24px}.is-enhanced .chapter-description{font-size:16px;line-height:1.8;max-width:360px;margin-bottom:30px}.is-enhanced .story-bottom{left:5%;right:5%;bottom:100px;padding:0}.is-enhanced .story-bottom>p{font-size:11px;position:absolute;right:0;top:0;text-align:right;max-width:330px}.story-dots{display:flex;gap:25px}.story-dot{display:flex;align-items:center;gap:9px;font-size:11px;color:#547786;transition:color .5s}.story-dot i{width:15px;height:1px;background:currentColor}.story-dot.is-active{color:#d6e9f1}.story-progress{left:0;right:0;bottom:-30px}.story:not(.is-enhanced) .story-poster{max-width:700px}.story:not(.is-enhanced) .story-steps{max-width:1000px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:40px}.story:not(.is-enhanced) .story-bottom{padding-inline:5%}.offer{padding-block:145px 100px;grid-template-columns:1.1fr .9fr;gap:100px}.offer-photo{min-height:640px;padding-top:38px}.offer-photo>.eyebrow{padding-left:35px;font-size:11px}.offer-photo img{width:120%;margin-left:-10%}.offer-photo>span{padding:0 35px 40px;font-size:11px}.offer-details h2{font-size:68px}.price{font-size:40px}.faq{padding-block:75px 140px;gap:120px}.faq h2{font-size:58px}.faq-question{font-size:18px;padding-block:27px}.faq-answer{font-size:15px}.sticky-buy{right:35px;bottom:28px}.footer{padding-top:45px;padding-bottom:130px}}
+/* Adaptação condicional ((max-width:375px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(max-width:375px){.hero-copy h1{font-size:40px}.hero-description{font-size:14px}.hero-copy{padding-inline:18px}.section-width{width:calc(100% - 40px)}.is-enhanced .story-chapter h2{font-size:31px}.is-enhanced .chapter-description{font-size:13px}.is-enhanced .story-steps{top:45%}.is-enhanced .story-scene{height:43%}.story-bottom>p{font-size:9px}.sticky-buy>a{font-size:12px}}
+/* Adaptação condicional ((max-height:700px) and (max-width:1023px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(max-height:700px) and (max-width:1023px){.is-enhanced .story-stage{min-height:0;height:100svh}.is-enhanced .story-scene{height:40%;top:1%}.is-enhanced .story-steps{top:40%}.is-enhanced .story-chapter h2{font-size:28px;margin-bottom:12px}.is-enhanced .chapter-description{font-size:13px;line-height:1.5;max-width:none;margin-bottom:10px}.is-enhanced .layer-index{font-size:9px;margin-bottom:10px}.is-enhanced .story-bottom{bottom:77px}.is-enhanced .story-bottom>p{font-size:9px}.story-top{padding-top:20px}}
+/* Adaptação condicional ((prefers-reduced-motion:reduce)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(prefers-reduced-motion:reduce){.hero-visual{transform:translateX(-50%)!important}.story-chapter{transition:none!important}}
+
+/* Adaptação condicional ((max-width:1023px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(max-width:1023px){.hero-foot{bottom:85px}}
+
+section[tabindex="-1"]:focus{outline:none}
+
+/* Edge-to-edge photography. Text keeps its own comfortable reading gutter. */
+.hero-visual {
+  width: 100%;
+  max-width: none;
+  height: 56%;
+  bottom: 0;
+  mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+}
+.hero-visual img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; }
+.offer.section-width { width: 100%; max-width: none; margin-inline: 0; }
+.offer { gap: 0; padding: 0 0 45px; display: block; }
+.offer-photo { height: 380px; min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; }
+.offer-photo img { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; object-fit: cover; object-position: 50% 50%; mask-image: none; }
+.offer-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, #111c2466, transparent 24%, transparent 65%, #111c24); }
+.offer-photo>.eyebrow { position: absolute; z-index: 1; left: 24px; top: 30px; padding: 0; font-size: 12px; }
+.offer-photo>span { position: absolute; z-index: 1; left: 24px; bottom: 22px; padding: 0; font-size: 12px; }
+.offer-details { padding: 32px 24px 40px; }
+
+/* Tinted liquid glass: layered reflection, bright rim and a quiet press response. */
+.button, .sticky-buy {
+  --glass-fill: #284c60b8;
+  --glass-ink: #f0fbff;
+  position: relative;
+  isolation: isolate;
+  color: var(--glass-ink);
+  border: 1px solid #d2f4ff63;
+  background:
+    radial-gradient(ellipse at 12% 0%, #efffff42, transparent 60%),
+    linear-gradient(155deg, #d5f4ff21 2%, #8acfe90a 48%, #b6edff29 100%),
+    var(--glass-fill);
+  box-shadow: inset 0 1px 0 #f0fcff70, inset 0 -1px 0 #a1dff42e, inset 1px 0 1px #e0f9ff24, 0 8px 24px #06141f24;
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  backdrop-filter: blur(22px) saturate(160%);
+}
+.button { min-height: 44px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background-color .25s ease; }
+.button::before, .sticky-buy::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, #ffffff16, transparent 28%, transparent 70%, #d4f6ff10);
+  box-shadow: inset 0 0 0 1px #e2faff09;
+}
+.button-primary, .sticky-buy { --glass-fill: #70b5cdd9; --glass-ink: #092834; border-color: #d9f8ffad; text-shadow: 0 1px 0 #d9f9ff30; }
+.button-primary { font-weight: 600; }
+.sticky-buy { position: fixed; padding: 5px 7px 5px 19px; }
+.sticky-buy>a { min-height: 44px; font-size: 14px; }
+.sticky-buy small { color: #214957; }
+.faq-question>svg { width: 30px; height: 30px; flex-shrink: 0; margin-top: 0; padding: 6px; border-radius: 50%; border: 1px solid #c5eafa40; background: linear-gradient(145deg, #b4e3f52b, #497b931a); box-shadow: inset 0 1px 0 #dbf6ff30; }
+/* Adaptação condicional ((hover:hover)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(hover:hover) {
+  .button:not(:disabled):hover {
+    background: radial-gradient(ellipse at 85% 0%, #e6ffff4d, transparent 64%), linear-gradient(155deg, #d5f4ff2e, #8acfe910 48%, #b6edff38), var(--glass-fill);
+    border-color: #e6faffc2;
+    box-shadow: inset 0 1px 1px #f0fcffa3, inset 0 -1px 1px #b1e4f04d, 0 10px 28px #06141f33;
+    transform: translateY(-2px);
+  }
+  .sticky-buy:hover { border-color: #ecfbffe6; }
+}
+.button:not(:disabled):active { transform: scale(.97); }
+/* Compatibilidade: usa este bloco apenas quando o navegador suporta not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .button { background: #25485a; }
+  .button-primary, .sticky-buy { background: #9acede; color: #092834; }
+}
+/* Adaptação condicional ((min-width:600px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(min-width:600px) {
+  .hero-visual { height: 62%; }
+  .offer-photo>.eyebrow, .offer-photo>span { left: 40px; }
+  .offer-photo { height: 530px; }
+  .offer-details { max-width: 680px; margin-inline: auto; padding: 42px 40px 60px; }
+  .sticky-buy { padding: 8px 12px 8px 20px; }
+  .sticky-buy>a { border-color: #173f5130; }
+}
+/* Adaptação condicional ((min-width:1024px)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(min-width:1024px) {
+  .hero-visual { height: 64%; }
+  .hero-visual img { object-position: 50% 20%; }
+  .offer { display: grid; grid-template-columns: 55% 45%; align-items: stretch; gap: 0; padding: 0; }
+  .offer-photo { height: auto; min-height: 840px; }
+  .offer-photo img { object-position: 48% 50%; }
+  .offer-photo::after { background: linear-gradient(90deg, transparent 68%, #111c24), linear-gradient(180deg, #111c2422, transparent 20%, transparent 80%, #111c24aa); }
+  .offer-photo>.eyebrow { top: 60px; left: 9%; }
+  .offer-photo>span { left: 9%; bottom: 60px; }
+  .offer-details { max-width: none; margin: 0; padding: 100px max(40px, calc((100vw - 1220px) / 2)) 90px 24px; }
+}
+/* Adaptação condicional ((prefers-reduced-motion:reduce)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(prefers-reduced-motion:reduce) {
+  .button:not(:disabled):hover, .button:not(:disabled):active { transform: none; }
+}
+/* Adaptação condicional ((prefers-reduced-transparency:reduce), (prefers-contrast:more)): aplica estes ajustes somente quando a tela ou preferência corresponde à consulta. */
+@media(prefers-reduced-transparency:reduce), (prefers-contrast:more) {
+  .button, .sticky-buy { --glass-fill: #25485a; background: var(--glass-fill); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .button-primary, .sticky-buy { --glass-fill: #b6e1ed; background: var(--glass-fill); color: #092834; }
+  .button:not(:disabled):hover { background: var(--glass-fill); }
+  .button::before, .sticky-buy::before { display: none; }
+}
