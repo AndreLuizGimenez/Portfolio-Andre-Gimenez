@@ -12,6 +12,49 @@ let view = 'mobile';
 let frameAnimation;
 let demoStarted = false;
 let demoLoadTimeout;
+let resetGeneration = 0;
+let resetTimer;
+
+function resetDemoToStart() {
+  const generation = ++resetGeneration;
+  clearTimeout(resetTimer);
+
+  function resetPosition() {
+    if (!screen.classList.contains('is-loaded')) return true;
+    try {
+      const win = demo.contentWindow;
+      const doc = win.document;
+      const hero = doc.getElementById('inicio');
+      if (!hero) return false;
+      // Cancel Nival's active gestures before asking its controller to navigate.
+      win.dispatchEvent(new win.HashChangeEvent('hashchange'));
+      win.history.replaceState(win.history.state, '', '#inicio');
+      if (doc.documentElement.classList.contains('scroll-programmatic') || doc.querySelector('[data-spec-transition]')) return false;
+      const navigation = new win.CustomEvent('nival:section-navigation', {
+        cancelable: true,
+        detail: { target: hero, behavior: 'instant' }
+      });
+      if (win.dispatchEvent(navigation)) win.scrollTo({ top: 0, behavior: 'instant' });
+      return true;
+    } catch {
+      demo.src = `${demo.dataset.src}#inicio`;
+      return true;
+    }
+  }
+
+  resetPosition();
+  // Reset again after the viewport resize, which otherwise preserves Nival's old section.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    let attempts = 0;
+    function settle() {
+      if (generation !== resetGeneration) return;
+      if (resetPosition()) return;
+      if (++attempts < 30) resetTimer = window.setTimeout(settle, 50);
+      else demo.src = `${demo.dataset.src}#inicio`;
+    }
+    settle();
+  }));
+}
 
 function fitDemo() {
   const logicalWidth = view === 'mobile' ? 393 : 1440;
@@ -24,6 +67,7 @@ function fitDemo() {
 }
 
 function changeView(nextView) {
+  resetDemoToStart();
   if (view === nextView) return;
   frameAnimation?.cancel();
   const before = frame.getBoundingClientRect();
@@ -39,7 +83,7 @@ function changeView(nextView) {
       { transformOrigin: 'top left', transform: 'translate(0, 0) scale(1, 1)' }
     ], { duration: 760, easing: 'cubic-bezier(.22,1,.36,1)' });
   }
-  announcement.textContent = view === 'mobile' ? 'Visualização de celular selecionada.' : 'Visualização de computador selecionada.';
+  announcement.textContent = view === 'mobile' ? 'Visualização de celular selecionada. Demonstração no início.' : 'Visualização de computador selecionada. Demonstração no início.';
 }
 
 function startDemo() {
@@ -57,14 +101,12 @@ demo.addEventListener('load', () => {
   clearTimeout(demoLoadTimeout);
   screen.classList.add('is-loaded');
   screen.querySelector('.demo-error').hidden = true;
+  resetDemoToStart();
 });
 viewButtons.forEach(button => button.addEventListener('click', () => { startDemo(); changeView(button.dataset.device); }));
 document.querySelector('#restart-demo').addEventListener('click', () => {
   if (!demoStarted) startDemo();
-  else {
-    try { demo.contentWindow.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'instant' : 'smooth' }); }
-    catch { demo.src = demo.dataset.src; }
-  }
+  else resetDemoToStart();
 });
 new ResizeObserver(fitDemo).observe(screen);
 fitDemo();
