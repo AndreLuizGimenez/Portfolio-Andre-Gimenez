@@ -183,8 +183,8 @@ img { display: block; max-width: 100%; }
 @media (max-width: 760px) {
   html { scroll-padding-top: 92px; }
   .wrap { width: calc(100% - 36px); }
-  .site-header { padding-top: 104px; padding-bottom: 32px; gap: 24px; }
-  .identity { font-size: 1rem; }
+  .site-header { align-items: center; padding-top: 104px; padding-bottom: 32px; gap: 24px; }
+  .identity { align-items: center; text-align: center; font-size: 1rem; }
   .site-nav { top: 16px; width: calc(100% - 36px); gap: 0; padding: 5px; }
   .site-nav a { flex: 1 1 auto; text-align: center; padding: 12px 7px; font-size: .8125rem; }
   .site-nav::before { top: 5px; bottom: 5px; }
