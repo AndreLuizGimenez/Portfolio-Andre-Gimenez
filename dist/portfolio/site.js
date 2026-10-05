@@ -242,6 +242,10 @@ function fitDemo() {
   demo.style.width = `${logicalWidth}px`;
   demo.style.height = `${logicalHeight}px`;
   demo.style.transform = `scale(${scale})`;
+  const space = frame.parentElement;
+  space.style.setProperty('--halo-width', `${frame.offsetWidth}px`);
+  space.style.setProperty('--halo-height', `${frame.offsetHeight}px`);
+  space.style.setProperty('--halo-radius', getComputedStyle(frame).borderTopLeftRadius);
 }
 
 function changeView(nextView) {
