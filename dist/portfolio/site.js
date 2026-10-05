@@ -2,12 +2,32 @@
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
+function applyTheme(theme, persist = true) {
+  const nextTheme = theme === 'night' ? 'night' : 'day';
+  document.documentElement.dataset.theme = nextTheme;
+  themeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === nextTheme)));
+  if (persist) {
+    try { window.localStorage.setItem('portfolio-theme', nextTheme); } catch {}
+  }
+}
+let initialTheme = 'day';
+try {
+  const savedTheme = window.localStorage.getItem('portfolio-theme');
+  if (savedTheme === 'night') initialTheme = 'night';
+} catch {}
+applyTheme(initialTheme, false);
+themeButtons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.themeChoice)));
+
 function initRevealMotion() {
   if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
-  document.querySelectorAll('[data-animate-text]').forEach(element => {
+  const textElements = [...document.querySelectorAll('[data-animate-text]')];
+  textElements.forEach(element => {
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
+    const isTitle = element.classList.contains('project-name');
+    const baseDelay = isTitle ? 0 : element.classList.contains('project-subtitle') ? 220 : 90;
     let index = 0;
     nodes.forEach(node => {
       const fragment = document.createDocumentFragment();
@@ -16,17 +36,22 @@ function initRevealMotion() {
         const word = document.createElement('span');
         word.className = 'word-reveal';
         word.textContent = part;
-        word.style.setProperty('--word-delay', `${Math.min(index++ * 24, 360)}ms`);
+        word.style.setProperty('--word-delay', `${baseDelay + Math.min(index++ * (isTitle ? 80 : 18), 320)}ms`);
         fragment.append(word);
       });
       node.replaceWith(fragment);
     });
   });
-  const targets = [...document.querySelectorAll('.identity, .site-header nav, .project-heading, .project-copy, .demo-area, .game-media, .site-footer')];
+  const targets = [...document.querySelectorAll('.identity, .theme-toggle, .project-kind, .project-heading h2, .project-copy > p, .technology-list, .device-controls, .demo-instructions, .media-reveal, .demo-links, .project-details, .details-content > div, .contact-label, .contact-phone, .whatsapp-symbol, .footer-bottom')];
   targets.forEach(element => element.setAttribute('data-reveal', ''));
-  document.querySelectorAll('.identity, .site-header nav, #ecommerce .project-heading, #ecommerce .project-copy').forEach((element, index) => {
-    element.style.setProperty('--reveal-delay', `${index * 100}ms`);
+  document.querySelectorAll('.project-intro').forEach(intro => {
+    intro.querySelector('h2').style.setProperty('--reveal-delay', '80ms');
+    intro.querySelector('.project-copy > p').style.setProperty('--reveal-delay', '160ms');
+    intro.querySelector('.technology-list').style.setProperty('--reveal-delay', '240ms');
   });
+  document.querySelector('.theme-toggle').style.setProperty('--reveal-delay', '120ms');
+  document.querySelectorAll('.technology-list li').forEach((element, index) => element.style.setProperty('--item-index', index % 4));
+  document.querySelectorAll('.details-content > div').forEach((element, index) => element.style.setProperty('--reveal-delay', `${index * 100}ms`));
   document.documentElement.classList.add('motion-ready');
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -34,7 +59,7 @@ function initRevealMotion() {
       entry.target.classList.add('is-revealed');
       observer.unobserve(entry.target);
     });
-  }, { threshold: .08, rootMargin: '0px 0px -32px 0px' });
+  }, { threshold: .01, rootMargin: '0px 0px -4% 0px' });
   targets.forEach(element => observer.observe(element));
   reducedMotion.addEventListener('change', () => {
     if (!reducedMotion.matches) return;
@@ -43,6 +68,53 @@ function initRevealMotion() {
   });
 }
 initRevealMotion();
+
+// The heading recedes gently as its project takes over. Interactive frames
+// stop moving after their entrance; the visitor always retains native scroll.
+function initSceneMotion() {
+  const intros = [...document.querySelectorAll('.project-intro')];
+  const nav = document.querySelector('.site-nav');
+  const links = [...nav.querySelectorAll('a')];
+  const sections = links.map(link => document.querySelector(link.getAttribute('href')));
+  let pendingFrame = 0;
+  let currentIndex = -1;
+  function update() {
+    pendingFrame = 0;
+    const viewport = window.innerHeight;
+    const marker = viewport * .48;
+    let nextIndex = 0;
+    sections.forEach((section, index) => {
+      if (section.getBoundingClientRect().top <= marker) nextIndex = index;
+    });
+    if (window.scrollY + viewport >= document.documentElement.scrollHeight - 8) nextIndex = links.length - 1;
+    if (nextIndex !== currentIndex) {
+      currentIndex = nextIndex;
+      links.forEach((link, index) => {
+        if (index === currentIndex) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    }
+    const activeLink = links[currentIndex];
+    nav.style.setProperty('--nav-x', `${activeLink.offsetLeft}px`);
+    nav.style.setProperty('--nav-width', `${activeLink.offsetWidth}px`);
+    intros.forEach(intro => {
+      const rect = intro.getBoundingClientRect();
+      const progress = reducedMotion.matches ? 0 : Math.max(0, Math.min(1, (106 - rect.top) / Math.max(rect.height, 1)));
+      intro.style.setProperty('--chapter-lift', `${(-progress * 24).toFixed(2)}px`);
+      intro.style.setProperty('--chapter-scale', (1 - progress * .035).toFixed(4));
+    });
+  }
+  function schedule() {
+    if (!pendingFrame) pendingFrame = requestAnimationFrame(update);
+  }
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule, { passive: true });
+  window.addEventListener('pageshow', schedule);
+  reducedMotion.addEventListener('change', schedule);
+  new ResizeObserver(schedule).observe(nav);
+  update();
+}
+initSceneMotion();
 
 const showcase = document.querySelector('#nival-showcase');
 const frame = document.querySelector('#device-frame');
@@ -92,21 +164,9 @@ window.addEventListener('message', event => {
 document.addEventListener('fullscreenchange', stopOuterMomentum);
 document.addEventListener('visibilitychange', stopOuterMomentum);
 
-if (window.matchMedia('(hover: hover)').matches && !reducedMotion.matches) {
-  document.querySelectorAll('.glass-surface').forEach(element => {
-    element.addEventListener('pointermove', event => {
-      const bounds = element.getBoundingClientRect();
-      element.style.setProperty('--glass-x', `${(event.clientX - bounds.left) / bounds.width * 100}%`);
-      element.style.setProperty('--glass-y', `${(event.clientY - bounds.top) / bounds.height * 100}%`);
-    }, { passive: true });
-    element.addEventListener('pointerleave', () => {
-      element.style.removeProperty('--glass-x');
-      element.style.removeProperty('--glass-y');
-    });
-  });
-}
 let view = 'mobile';
 let frameAnimation;
+let switchBlurTimer;
 let demoStarted = false;
 let demoLoadTimeout;
 let resetGeneration = 0;
@@ -166,6 +226,9 @@ function fitDemo() {
 function changeView(nextView) {
   resetDemoToStart();
   if (view === nextView) return;
+  clearTimeout(switchBlurTimer);
+  showcase.classList.add('is-switching');
+  switchBlurTimer = window.setTimeout(() => showcase.classList.remove('is-switching'), reducedMotion.matches ? 0 : 820);
   frameAnimation?.cancel();
   const before = frame.getBoundingClientRect();
   view = nextView;

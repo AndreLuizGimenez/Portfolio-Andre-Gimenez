@@ -2,7 +2,7 @@
 
 Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total. As descrições acima das mídias tratam apenas dos projetos. A página usa os títulos do currículo e não apresenta os nomes próprios dos projetos.
 
-O visual Liquid Glass usa fundo suave azul/lavanda, molduras translúcidas e reflexos discretos. O contato destaca o telefone em tamanho grande com link para WhatsApp.
+O visual Liquid Glass usa branco tonalizado como base, azul escuro acinzentado nos destaques maiores, azul claro apenas nos pequenos detalhes e texto preto ou branco conforme a superfície. As bordas têm reflexos prismáticos discretos e refração do fundo em Chromium, com desfoque como fallback nos demais motores. O contato destaca o telefone em tamanho grande com link para WhatsApp.
 
 ## Prévia local
 
@@ -44,7 +44,7 @@ O currículo e o contexto da vaga foram usados apenas neste projeto. Nenhum arqu
 
 ## Movimento
 
-Títulos e descrições aparecem palavra por palavra, com opacidade, deslocamento e desfoque. A mídia entra com escala discreta. O seletor tem indicador deslizante e a moldura se expande com uma única instância do iframe. A escolha de cada formato retorna ao início pelos controles da demonstração, antes e após o resize. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. `prefers-reduced-motion` mantém o texto visível, remove a revelação por palavras e a expansão espacial, e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
+Títulos e descrições aparecem palavra por palavra, com opacidade, deslocamento e desfoque. A mídia entra com escala discreta. O seletor tem indicador deslizante em vidro escuro translúcido e a moldura se expande com uma única instância do iframe. A navegação de projetos permanece fixa durante a rolagem; identidade e tema ficam no cabeçalho inicial. O controle Diurno/Noturno alterna entre a composição clara atual e uma composição escura, preservando os acentos de vidro azul, e guarda a escolha localmente. A escolha de cada formato retorna ao início pelos controles da demonstração, antes e após o resize, com um desfoque curto durante a transição. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. `prefers-reduced-motion` mantém o texto visível, remove a revelação por palavras, a expansão espacial e o desfoque de troca, e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
 
 Tipografia principal: SF Pro disponível localmente no sistema Apple, seguida de `-apple-system`, `BlinkMacSystemFont` e fallbacks de sistema. A página principal não baixa nem redistribui arquivos de fontes Apple. As fontes próprias da demonstração permanecem no snapshot.
 

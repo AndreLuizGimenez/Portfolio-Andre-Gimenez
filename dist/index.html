@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f5f7">
+  <meta name="theme-color" content="#f4f6f7">
   <title>André Gimenez — Desenvolvimento com IA</title>
   <meta name="description" content="Projetos de André Luiz Gimenez da Silva: e-commerce com desenvolvimento orientado por IA e game development com Unreal Engine e MCP.">
   <meta property="og:title" content="André Gimenez — Desenvolvimento com IA">
@@ -11,31 +11,40 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
   <link rel="canonical" href="https://andre-gimenez-portfolio.loots-martini-0sspee.chatgpt.site/">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230071e3'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23415b69'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/portfolio/style.css">
   <script src="/portfolio/site.js" defer></script>
+  <script src="/portfolio/glass.js" defer></script>
 </head>
 <body>
-  <svg class="glass-filters" aria-hidden="true" focusable="false"><defs><filter id="glass-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".012 .018" numOctaves="2" seed="7" result="texture"/><feGaussianBlur in="texture" stdDeviation="2" result="lens"/><feDisplacementMap in="SourceGraphic" in2="lens" scale="10" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
-  <div class="site-backdrop" aria-hidden="true"><div class="ambient-orbit orbit-one"></div><div class="ambient-orbit orbit-two"></div><div class="ambient-orbit orbit-three"></div></div>
+  <svg class="glass-filters" aria-hidden="true" focusable="false"><defs id="glass-lenses"></defs></svg>
+  <div class="site-backdrop" aria-hidden="true"></div>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <header class="site-header wrap" id="inicio">
     <a class="identity" href="#inicio"><span>André Luiz Gimenez da Silva</span><span class="identity-role">AI Engineer</span></a>
-    <nav class="glass-surface" aria-label="Navegação principal"><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
+    <div class="header-tools">
+      <div class="theme-toggle glass-surface" role="group" aria-label="Tema visual">
+        <button type="button" data-theme-choice="day" aria-pressed="true"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Diurno</span></button>
+        <button type="button" data-theme-choice="night" aria-pressed="false"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Noturno</span></button>
+      </div>
+    </div>
   </header>
+  <nav class="site-nav glass-surface" aria-label="Navegação principal"><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
   <main id="conteudo">
     <section class="projects wrap" id="projetos" aria-labelledby="projects-title">
       <h1 class="sr-only" id="projects-title">Projetos de André Luiz Gimenez da Silva</h1>
       <article class="project" id="ecommerce" aria-labelledby="ecommerce-title">
-        <div class="project-heading"><div><p class="project-kind">Web · Experiência de produto</p><h2 id="ecommerce-title" data-animate-text>E-commerce <span class="project-subtitle">| AI-Driven Development</span></h2></div><span class="project-status glass-surface">Em desenvolvimento</span></div>
-        <div class="project-copy"><p data-animate-text>Aplicação mobile-first e responsiva, construída com IA do planejamento arquitetural à implementação, UI/UX, refinamento e debugging.</p><ul class="technology-list" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul></div>
+        <div class="project-intro">
+          <div class="project-heading"><div><p class="project-kind">Web · Experiência de produto</p><h2 id="ecommerce-title"><span class="project-name" data-animate-text>E-commerce</span><span class="project-subtitle" data-animate-text>| AI-Driven Development</span></h2></div></div>
+          <div class="project-copy"><p data-animate-text>Aplicação mobile-first e responsiva, <strong>construída com IA</strong> do planejamento arquitetural à implementação, UI/UX, refinamento e debugging.</p><ul class="technology-list" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul></div>
+        </div>
         <div class="showcase" id="nival-showcase" data-view="mobile">
           <div class="demo-area">
             <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
             <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Coloque o cursor dentro da moldura<br>para clicar e rolar o site.</span><span class="touch-hint">Toque e deslize dentro da moldura<br>para explorar o site.</span></p>
-            <div class="device-space">
+            <div class="device-space media-reveal">
               <div class="device-frame glass-surface" id="device-frame">
-                <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface">Fechar tela cheia</button>
+                <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface"><span>Fechar tela cheia</span></button>
                 <div class="device-camera" aria-hidden="true"></div>
                 <div class="desktop-chrome" aria-hidden="true"><span></span><span></span><span></span><div>E-commerce · demonstração</div></div>
                 <div class="device-screen" id="device-screen">
@@ -45,19 +54,21 @@
                 </div>
               </div>
             </div>
-            <div class="demo-links"><button class="glass-surface" type="button" id="expand-demo">Ampliar demonstração <span aria-hidden="true">↗</span></button><a class="glass-surface" href="/demos/nival/" target="_blank" rel="noopener">Abrir em outra aba <span aria-hidden="true">↗</span><span class="sr-only">(abre em uma nova aba)</span></a><button class="glass-surface" type="button" id="restart-demo">Voltar ao início</button></div>
+            <div class="demo-links"><button class="glass-surface" type="button" id="expand-demo"><span>Ampliar demonstração</span> <span aria-hidden="true">↗</span></button><a class="glass-surface" href="/demos/nival/" target="_blank" rel="noopener"><span>Abrir em outra aba</span> <span aria-hidden="true">↗</span><span class="sr-only">(abre em uma nova aba)</span></a><button class="glass-surface" type="button" id="restart-demo"><span>Voltar ao início</span></button></div>
             <p class="sr-only" id="demo-announcement" aria-live="polite">Visualização de celular selecionada.</p>
           </div>
         </div>
         <details class="project-details"><summary>Desenvolvimento do projeto <span aria-hidden="true">+</span></summary><div class="details-content"><div><h3>Arquitetura</h3><p>Planejamento arquitetural com IA e construção da aplicação por etapas.</p></div><div><h3>UI/UX</h3><p>Aplicação mobile-first e responsiva, com interfaces próprias para celular e computador.</p></div><div><h3>Refinamento</h3><p>Implementação, refinamento da interface e debugging com IA ao longo do desenvolvimento.</p></div></div></details>
       </article>
       <article class="project game-project" id="game" aria-labelledby="game-title">
-        <div class="project-heading"><div><p class="project-kind">Game · Experiência interativa</p><h2 id="game-title" data-animate-text>Game Development <span class="project-subtitle">| Unreal Engine + MCP</span></h2></div><span class="project-status glass-surface">Em desenvolvimento</span></div>
-        <div class="project-copy"><p data-animate-text>Um jogo em desenvolvimento na Unreal Engine, construído integralmente com IA e MCP, com arquitetura, planejamento por etapas, implementação e refinamento contínuo.</p><ul class="technology-list" aria-label="Tecnologias do desenvolvimento do jogo"><li>Unreal Engine</li><li>IA</li><li>MCP</li></ul></div>
-        <div class="game-media glass-surface">
+        <div class="project-intro">
+          <div class="project-heading"><div><p class="project-kind">Game · Experiência interativa</p><h2 id="game-title"><span class="project-name" data-animate-text><span class="title-line">Game</span> <span class="title-line">Development</span></span><span class="project-subtitle" data-animate-text>| Unreal Engine + MCP</span></h2></div></div>
+          <div class="project-copy"><p data-animate-text>Um jogo em desenvolvimento na Unreal Engine, <strong>construído integralmente com IA e MCP</strong>, com arquitetura, planejamento por etapas, implementação e refinamento contínuo.</p><ul class="technology-list" aria-label="Tecnologias do desenvolvimento do jogo"><li>Unreal Engine</li><li>IA</li><li>MCP</li></ul></div>
+        </div>
+        <div class="game-media glass-surface media-reveal">
           <video id="game-video" poster="/portfolio/roda-roda-poster.jpg" width="1920" height="1080" loop muted playsinline preload="none" aria-label="Demonstração do desenvolvimento na Unreal Engine"><source src="/portfolio/roda-roda.mp4" data-src="/portfolio/roda-roda.mp4" type="video/mp4">Seu navegador não reproduz este vídeo. <a href="/portfolio/roda-roda.mp4">Abrir demonstração</a></video>
           <button class="video-toggle glass-surface" id="video-toggle" type="button" aria-label="Reproduzir demonstração"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="play-symbol" d="m9 5 10 7-10 7V5Z" fill="currentColor"/><path class="pause-symbol" d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3"/></svg><span>Reproduzir</span></button>
-          <span class="video-duration glass-surface">12,5 s · sem áudio</span>
+          <span class="video-duration glass-surface"><span>12,5 s · sem áudio</span></span>
         </div>
       </article>
     </section>
