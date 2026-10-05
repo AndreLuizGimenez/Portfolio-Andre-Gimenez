@@ -1,5 +1,7 @@
 'use strict';
 
+import { createDemoInteraction, maximumFrameWidth } from './demo-interaction.mjs';
+
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
@@ -123,6 +125,7 @@ const demo = document.querySelector('#nival-demo');
 const poster = document.querySelector('#demo-poster');
 const viewButtons = [...document.querySelectorAll('[data-device]')];
 const announcement = document.querySelector('#demo-announcement');
+let interaction;
 let outerMomentumFrame = 0;
 function stopOuterMomentum() {
   cancelAnimationFrame(outerMomentumFrame);
@@ -146,6 +149,11 @@ window.addEventListener('message', event => {
   if (event.origin !== window.location.origin || event.source !== demo.contentWindow) return;
   const data = event.data;
   if (!data || data.type !== 'portfolio:scroll' || !['wheel', 'touch'].includes(data.input) || !['move', 'end'].includes(data.phase)) return;
+  if (interaction?.isActive()) {
+    // While selected, the demo owns the gesture. Its loader or upper edge
+    // cannot move the centered portfolio; only the true end releases it.
+    if (data.phase !== 'move' || !(data.delta > 0) || !interaction.releaseAtEnd()) return;
+  }
   stopOuterMomentum();
   if (document.fullscreenElement) return;
   const scale = data.input === 'touch' ? screen.clientWidth / (view === 'mobile' ? 393 : 1440) : 1;
@@ -214,6 +222,19 @@ function resetDemoToStart() {
 }
 
 function fitDemo() {
+  if (!document.fullscreenElement) {
+    const styles = getComputedStyle(frame);
+    const horizontalChrome = parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight)
+      + parseFloat(styles.borderLeftWidth) + parseFloat(styles.borderRightWidth);
+    const verticalChrome = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom)
+      + parseFloat(styles.borderTopWidth) + parseFloat(styles.borderBottomWidth)
+      + (view === 'desktop' ? frame.querySelector('.desktop-chrome').offsetHeight : 0);
+    const nav = document.querySelector('.site-nav');
+    const width = maximumFrameWidth({ height: window.visualViewport?.height || window.innerHeight,
+      navBottom: parseFloat(getComputedStyle(nav).top) + nav.offsetHeight,
+      verticalChrome, horizontalChrome, ratio: view === 'mobile' ? 393 / 852 : 1440 / 900 });
+    frame.style.setProperty('--frame-max-width', `${width}px`);
+  }
   const logicalWidth = view === 'mobile' ? 393 : 1440;
   const logicalHeight = view === 'mobile' ? 852 : 900;
   const scale = screen.clientWidth / logicalWidth;
@@ -224,6 +245,7 @@ function fitDemo() {
 }
 
 function changeView(nextView) {
+  interaction?.deactivate('format');
   resetDemoToStart();
   if (view === nextView) return;
   clearTimeout(switchBlurTimer);
@@ -255,6 +277,12 @@ function startDemo() {
     if (!screen.classList.contains('is-loaded')) screen.querySelector('.demo-error').hidden = false;
   }, 30000);
 }
+
+interaction = createDemoInteraction({ frame, demo, activation: document.querySelector('#activate-demo'),
+  announcement, reducedMotion, startDemo, fitDemo });
+function resizeDemo() { fitDemo(); interaction.recenter(); }
+window.addEventListener('resize', resizeDemo, { passive: true });
+window.visualViewport?.addEventListener('resize', resizeDemo, { passive: true });
 
 demo.addEventListener('load', () => {
   if (!demoStarted) return;

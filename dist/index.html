@@ -13,7 +13,7 @@
   <link rel="canonical" href="https://andre-gimenez-portfolio.loots-martini-0sspee.chatgpt.site/">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23415b69'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/portfolio/style.css">
-  <script src="/portfolio/site.js" defer></script>
+  <script src="/portfolio/site.js" type="module"></script>
   <script src="/portfolio/glass.js" defer></script>
 </head>
 <body>
@@ -41,7 +41,7 @@
         <div class="showcase" id="nival-showcase" data-view="mobile">
           <div class="demo-area">
             <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
-            <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Coloque o cursor dentro da moldura<br>para clicar e rolar o site.</span><span class="touch-hint">Toque e deslize dentro da moldura<br>para explorar o site.</span></p>
+            <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Clique na moldura para centralizar<br>e explorar o site. Clique fora para sair.</span><span class="touch-hint">Toque na moldura para centralizar<br>e explorar o site. Toque fora para sair.</span></p>
             <div class="device-space media-reveal">
               <div class="device-frame glass-surface" id="device-frame">
                 <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface"><span>Fechar tela cheia</span></button>
@@ -49,7 +49,8 @@
                 <div class="desktop-chrome" aria-hidden="true"><span></span><span></span><span></span><div>E-commerce · demonstração</div></div>
                 <div class="device-screen" id="device-screen">
                   <img class="demo-poster" src="/portfolio/nival-mobile.png" width="393" height="852" alt="Prévia do e-commerce no celular" id="demo-poster">
-                  <iframe id="nival-demo" data-src="/demos/nival/" title="Demonstração interativa do e-commerce" aria-describedby="demo-instructions" tabindex="0" allow="fullscreen" referrerpolicy="same-origin"></iframe>
+                  <iframe id="nival-demo" data-src="/demos/nival/" title="Demonstração interativa do e-commerce" aria-describedby="demo-instructions" tabindex="-1" inert allow="fullscreen" referrerpolicy="same-origin"></iframe>
+                  <button class="demo-activation" id="activate-demo" type="button" aria-label="Centralizar e explorar a demonstração" aria-describedby="demo-instructions"><span class="sr-only">Explorar demonstração</span></button>
                   <div class="demo-error" hidden><p>A demonstração não carregou.</p><a href="/demos/nival/" target="_blank" rel="noopener">Abrir o projeto em outra aba</a></div>
                 </div>
               </div>
