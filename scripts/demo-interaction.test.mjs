@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { maximumFrameWidth, centeredScrollTop, demoEndState } from '../dist/portfolio/demo-interaction.mjs';
+import { maximumFrameWidth, centeredScrollTop, demoEndState, demoBoundaryState, createDemoInteraction } from '../dist/portfolio/demo-interaction.mjs';
 
 test('phone including its bezel fits short, mobile and desktop viewports above the fixed navigation', () => {
   for (const [width, height, navBottom, verticalChrome, horizontalChrome] of [
@@ -53,4 +53,82 @@ test('loading and section animations cannot accidentally end the selected demo',
   const empty = endFixture({ y: 0 });
   empty.document.documentElement.scrollHeight = 1000;
   assert.equal(demoEndState(empty), false);
+});
+
+test('the upper edge releases only upward gestures, leaving the initial selection active', () => {
+  const win = endFixture({ y: 0 });
+  assert.equal(demoBoundaryState(win, -80), true);
+  assert.equal(demoBoundaryState(win, 80), false);
+  for (const delta of [0, undefined, NaN, Infinity, -Infinity]) {
+    assert.equal(demoBoundaryState(win, delta), false);
+  }
+  win.scrollY = 2;
+  assert.equal(demoBoundaryState(win, -20), true);
+  win.scrollY = 3;
+  assert.equal(demoBoundaryState(win, -20), false);
+  win.scrollY = 4000;
+  assert.equal(demoBoundaryState(win, 80), true);
+  assert.equal(demoBoundaryState(win, -80), false);
+});
+
+test('the upper edge cannot release during loading or an internal section transition', () => {
+  for (const options of [{ loader: true }, { transition: true }, { classes: ['scroll-programmatic'] }, { classes: ['scroll-animating'] }]) {
+    assert.equal(demoBoundaryState(endFixture({ ...options, y: 0 }), -80), null);
+  }
+});
+
+test('selection releases both edges without cancelling transferred touch, and clears the outside click cursor', () => {
+  const originals = new Map(['document', 'window', 'cancelAnimationFrame'].map(key => [key, Object.getOwnPropertyDescriptor(globalThis, key)]));
+  const classes = () => {
+    const values = new Set();
+    return { add: (...names) => names.forEach(name => values.add(name)),
+      toggle: (name, enabled) => enabled ? values.add(name) : values.delete(name),
+      contains: name => values.has(name) };
+  };
+  const bodyClasses = classes();
+  const outerDoc = Object.assign(new EventTarget(), { body: { classList: bodyClasses }, fullscreenElement: null });
+  const outerWindow = new EventTarget();
+  const childEvents = [];
+  const child = Object.assign(endFixture({ y: 0 }), { Event, dispatchEvent: event => { childEvents.push(event.type); } });
+  const frame = Object.assign(new EventTarget(), { classList: classes(), dataset: {},
+    closest: () => ({ classList: classes() }) });
+  const demo = Object.assign(new EventTarget(), { contentWindow: child, focus() {} });
+  const activation = { hidden: false };
+  const announcement = { textContent: '' };
+  try {
+    globalThis.document = outerDoc;
+    globalThis.window = outerWindow;
+    globalThis.cancelAnimationFrame = () => {};
+    const interaction = createDemoInteraction({ frame, demo, activation, announcement,
+      reducedMotion: { matches: true }, startDemo() {}, fitDemo() {} });
+    interaction.activate({ fullscreen: true });
+    assert.equal(interaction.isActive(), true);
+    assert.equal(bodyClasses.contains('is-demo-active'), true);
+    assert.equal(demo.inert, false);
+    assert.equal(interaction.releaseAtBoundary(80), false);
+    assert.equal(interaction.releaseAtBoundary(-80), true);
+    assert.equal(interaction.isActive(), false);
+    assert.equal(bodyClasses.contains('is-demo-active'), false);
+    assert.equal(demo.inert, true);
+    assert.match(announcement.textContent, /Início/);
+    assert.deepEqual(childEvents, []);
+
+    child.scrollY = 100;
+    interaction.activate({ fullscreen: true });
+    assert.equal(interaction.releaseAtBoundary(-80), false);
+    child.scrollY = 4000;
+    assert.equal(interaction.releaseAtBoundary(80), true);
+    assert.match(announcement.textContent, /Fim/);
+    assert.deepEqual(childEvents, []);
+
+    interaction.activate({ fullscreen: true });
+    interaction.deactivate('outside');
+    assert.deepEqual(childEvents, ['portfolio:scroll-handoff', 'touchcancel']);
+    assert.equal(bodyClasses.contains('is-demo-active'), false);
+  } finally {
+    for (const [key, descriptor] of originals) {
+      if (descriptor) Object.defineProperty(globalThis, key, descriptor);
+      else delete globalThis[key];
+    }
+  }
 });

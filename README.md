@@ -29,7 +29,7 @@ A suíte da ponte de rolagem tem 12 testes e requer Node.js 22.13 ou superior. O
 - `dist/portfolio/style.css`: composição desktop, adaptações mobile, molduras e estados de interação.
 - `dist/portfolio/site.js`: revelação dos textos, alternância de formato, escala real do iframe, recepção da rolagem externa, tela cheia e reprodução do vídeo.
 - `dist/portfolio/demo-interaction.mjs`: ativação por clique, centralização, limite responsivo da moldura e saída do modo interativo.
-- `scripts/demo-interaction.test.mjs`: verificação do encaixe e da centralização em telas curtas, além do fim do conteúdo e do FAQ.
+- `scripts/demo-interaction.test.mjs`: verificação do encaixe e da centralização em telas curtas, das duas extremidades e da preservação do gesto transferido.
 - `dist/portfolio/roda-roda.mp4`: cópia do vídeo final fornecido pelo usuário.
 - `dist/demos/nival/`: exportação estática da experiência original, com componentes reais e recursos locais.
 - `sources/nival/`: fonte isolada e reproduzível da exportação; veja seu README antes de atualizar a demonstração.
@@ -53,6 +53,6 @@ Tipografia principal: SF Pro disponível localmente no sistema Apple, seguida de
 
 ## Rolagem da demonstração
 
-A moldura começa desativada: passar o mouse sobre o celular revela uma luz branca e azul clara atrás das bordas, sem ativar a demonstração. O clique ou toque ativa a demonstração e centraliza a moldura inteira, com tamanho máximo que cabe na viewport. Clicar fora ou terminar o conteúdo desativa o modo, devolvendo a rolagem ao portfólio. Enquanto ativa, wheel sobre o fundo também segue para a demonstração. Escape oferece saída pelo teclado. A troca de formato desativa a interação e reinicia o projeto.
+A moldura começa desativada: passar o mouse sobre o celular revela uma luz suave e curta atrás das bordas, sem ativar a demonstração. O clique ou toque ativa a demonstração e centraliza a moldura inteira, com tamanho máximo que cabe na viewport. Durante a interação, o cursor fora da moldura indica que clicar ali encerra o modo. Clicar fora, terminar o conteúdo ou tentar rolar para cima no início devolve a rolagem ao portfólio. Enquanto ativa, wheel sobre o fundo também segue para a demonstração. Escape oferece saída pelo teclado. A troca de formato desativa a interação e reinicia o projeto.
 
-A ponte funciona apenas quando o iframe e o portfólio têm a mesma origem. Wheel/touch continuam na demonstração enquanto ela ou algum painel interno ainda podem rolar. O portfólio aceita a transferência ao fim do conteúdo; o FAQ desktop conserva sua rolagem interna mesmo com o cursor sobre o controle flutuante. Enquanto ativo, limite superior e carregamento preservam a centralização. Campos, diálogos, pinch, gestos horizontais e transições internas ficam independentes. Em tela cheia não há transferência. Abrir a demonstração sozinha também desativa a ponte.
+A ponte funciona apenas quando o iframe e o portfólio têm a mesma origem. Wheel/touch continuam na demonstração enquanto ela ou algum painel interno ainda podem rolar. O portfólio aceita a transferência ao ultrapassar o início para cima ou o fim para baixo; o FAQ desktop conserva sua rolagem interna mesmo com o cursor sobre o controle flutuante. Apenas estar no início não desativa a seleção. Carregamento e transições preservam a centralização. Campos, diálogos, pinch e gestos horizontais ficam independentes. Em tela cheia não há transferência. Abrir a demonstração sozinha também desativa a ponte.

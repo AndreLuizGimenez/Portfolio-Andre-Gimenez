@@ -10,11 +10,17 @@ export function centeredScrollTop({ scrollTop, top, height, viewportHeight, offs
 
 // The desktop FAQ has its own scroller. Reaching the document's last section
 // is only the end after that scroller has also run out of content.
+function demoIsTransitioning(win) {
+  const doc = win.document;
+  const html = doc.documentElement;
+  return Boolean(doc.querySelector('.site-loader') || html.classList.contains('scroll-programmatic')
+    || html.classList.contains('scroll-animating') || doc.querySelector('[data-spec-transition]'));
+}
+
 export function demoEndState(win) {
   const doc = win.document;
   const html = doc.documentElement;
-  if (doc.querySelector('.site-loader') || html.classList.contains('scroll-programmatic')
-    || html.classList.contains('scroll-animating') || doc.querySelector('[data-spec-transition]')) return null;
+  if (demoIsTransitioning(win)) return null;
   const root = doc.scrollingElement || html;
   const limit = root.scrollHeight - win.innerHeight;
   if (limit <= 2 || win.scrollY < limit - 2) return false;
@@ -23,6 +29,13 @@ export function demoEndState(win) {
     if (specs.scrollTop < specs.scrollHeight - specs.clientHeight - 2) return false;
   }
   return true;
+}
+
+export function demoBoundaryState(win, delta) {
+  if (!Number.isFinite(delta) || !delta) return false;
+  if (delta > 0) return demoEndState(win);
+  if (demoIsTransitioning(win)) return null;
+  return win.scrollY <= 2;
 }
 
 export function createDemoInteraction({ frame, demo, activation, announcement, reducedMotion, startDemo, fitDemo }) {
@@ -46,6 +59,7 @@ export function createDemoInteraction({ frame, demo, activation, announcement, r
   function setActive(next) {
     active = next;
     frame.classList.toggle('is-interactive', active);
+    document.body.classList.toggle('is-demo-active', active && !document.fullscreenElement);
     frame.dataset.interactive = String(active);
     activation.hidden = active;
     demo.inert = !active;
@@ -67,11 +81,13 @@ export function createDemoInteraction({ frame, demo, activation, announcement, r
     endFrame = 0;
     outerTouch = undefined;
     // A transferred touch must finish in the existing bridge after deactivation.
-    if (reason !== 'end') cancelChildGesture();
+    if (reason !== 'end' && reason !== 'start') cancelChildGesture();
     childTouch = false;
     if (document.activeElement === demo) activation.focus({ preventScroll: true });
     announcement.textContent = reason === 'end'
       ? 'Fim da demonstração. A rolagem voltou à página principal.'
+      : reason === 'start'
+      ? 'Início da demonstração. A rolagem voltou à página principal.'
       : 'Demonstração desativada. A rolagem controla a página principal.';
   }
 
@@ -202,9 +218,12 @@ export function createDemoInteraction({ frame, demo, activation, announcement, r
   });
   demo.addEventListener('load', observeDemo);
   setActive(false);
-  return { activate, deactivate, isActive: () => active, recenter: () => center('instant'), releaseAtEnd() {
+  return { activate, deactivate, isActive: () => active, recenter: () => center('instant'), releaseAtBoundary(delta) {
     try {
-      if (demoEndState(demo.contentWindow) === true) { deactivate('end'); return true; }
+      if (demoBoundaryState(demo.contentWindow, delta) === true) {
+        deactivate(delta < 0 ? 'start' : 'end');
+        return true;
+      }
     } catch {}
     return false;
   } };

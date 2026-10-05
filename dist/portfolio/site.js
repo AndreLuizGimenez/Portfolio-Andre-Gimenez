@@ -150,9 +150,8 @@ window.addEventListener('message', event => {
   const data = event.data;
   if (!data || data.type !== 'portfolio:scroll' || !['wheel', 'touch'].includes(data.input) || !['move', 'end'].includes(data.phase)) return;
   if (interaction?.isActive()) {
-    // While selected, the demo owns the gesture. Its loader or upper edge
-    // cannot move the centered portfolio; only the true end releases it.
-    if (data.phase !== 'move' || !(data.delta > 0) || !interaction.releaseAtEnd()) return;
+    // Keep the demo centered until a gesture moves beyond either content edge.
+    if (data.phase !== 'move' || !interaction.releaseAtBoundary(data.delta)) return;
   }
   stopOuterMomentum();
   if (document.fullscreenElement) return;
