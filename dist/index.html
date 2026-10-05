@@ -3,86 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f6f7">
-  <title>André Gimenez — Desenvolvimento com IA</title>
-  <meta name="description" content="Projetos de André Luiz Gimenez da Silva: e-commerce com desenvolvimento orientado por IA e game development com Unreal Engine e MCP.">
-  <meta property="og:title" content="André Gimenez — Desenvolvimento com IA">
-  <meta property="og:description" content="Explore uma aplicação web interativa e assista à demonstração de desenvolvimento na Unreal Engine.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
-  <link rel="canonical" href="https://andre-gimenez-portfolio.loots-martini-0sspee.chatgpt.site/">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23415b69'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="/portfolio/style.css">
-  <script src="/portfolio/site.js" type="module"></script>
-  <script src="/portfolio/glass.js" defer></script>
+  <meta name="theme-color" content="#f1f5f4">
+  <title>André Gimenez — AI Engineer</title>
+  <meta name="description" content="Portfólio de André Luiz Gimenez da Silva, AI Engineer.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23234c73'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preload" href="/portfolio/fonts/manrope-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/portfolio/style.css?v=4">
+  <script src="/portfolio/site.js?v=4" type="module"></script>
+  <script src="/portfolio/glass.js?v=4" defer></script>
 </head>
 <body>
   <svg class="glass-filters" aria-hidden="true" focusable="false"><defs id="glass-lenses"></defs></svg>
-  <div class="site-backdrop" aria-hidden="true"></div>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-  <header class="site-header wrap" id="inicio">
-    <a class="identity" href="#inicio"><span>André Luiz Gimenez da Silva</span><span class="identity-role">AI Engineer</span></a>
-    <div class="header-tools">
-      <div class="theme-toggle glass-surface" role="group" aria-label="Tema visual">
-        <span class="selection-lens glass-surface" aria-hidden="true"></span>
-        <button type="button" data-theme-choice="day" aria-pressed="true"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Diurno</span></button>
-        <button type="button" data-theme-choice="night" aria-pressed="false"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Noturno</span></button>
-      </div>
-    </div>
-  </header>
-  <nav class="site-nav glass-surface" aria-label="Navegação principal"><span class="selection-lens glass-surface" aria-hidden="true"></span><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
+  <div class="site-backdrop" aria-hidden="true">
+    <svg class="backdrop-waves" viewBox="0 0 1440 900" preserveAspectRatio="none">
+      <path class="wave-back" d="M-80 740 C180 490 420 730 670 638 C930 540 1110 406 1520 590 L1520 980 L-80 980Z"/>
+      <path class="wave-middle" d="M-80 782 C210 595 389 854 708 714 C980 594 1180 656 1520 471 L1520 980 L-80 980Z"/>
+      <path class="wave-front" d="M-80 895 C270 708 536 980 867 793 C1124 648 1310 777 1520 687 L1520 980 L-80 980Z"/>
+    </svg>
+  </div>
+  <a class="skip-link" href="#inicio">Pular para a abertura</a>
   <main id="conteudo">
-    <section class="projects wrap" id="projetos" aria-labelledby="projects-title">
-      <h1 class="sr-only" id="projects-title">Projetos de André Luiz Gimenez da Silva</h1>
-      <article class="project" id="ecommerce" aria-labelledby="ecommerce-title">
-        <div class="project-intro">
-          <div class="project-heading"><h2 id="ecommerce-title"><span class="project-name" data-animate-text>E-commerce</span></h2></div>
-          <div class="project-copy"><p data-animate-text>Aplicação mobile-first e responsiva, <strong>construída com IA</strong> do planejamento arquitetural à implementação, UI/UX, refinamento e debugging.</p><ul class="technology-list" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul></div>
+    <section class="hero-section" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-shell">
+        <div class="hero-topline hero-secondary" aria-label="Identificação do portfólio">
+          <span class="hero-mark" aria-hidden="true">AG</span>
+          <span class="hero-index">01 / PORTFÓLIO</span>
         </div>
-        <div class="showcase" id="nival-showcase" data-view="mobile">
-          <div class="demo-area">
-            <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><span class="selection-lens glass-surface" aria-hidden="true"></span><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
-            <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Clique na moldura para centralizar<br>e explorar o site. Clique fora para sair.</span><span class="touch-hint">Toque na moldura para centralizar<br>e explorar o site. Toque fora para sair.</span></p>
-            <div class="device-space media-reveal">
-              <div class="device-jelly glass-surface" aria-hidden="true"></div>
-              <div class="device-frame glass-surface" id="device-frame">
-                <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface"><span>Fechar tela cheia</span></button>
-                <div class="device-camera" aria-hidden="true"></div>
-                <div class="desktop-chrome" aria-hidden="true"><span></span><span></span><span></span><div>E-commerce · demonstração</div></div>
-                <div class="device-screen" id="device-screen">
-                  <img class="demo-poster" src="/portfolio/nival-mobile.png" width="393" height="852" alt="Prévia do e-commerce no celular" id="demo-poster">
-                  <iframe id="nival-demo" data-src="/demos/nival/" title="Demonstração interativa do e-commerce" aria-describedby="demo-instructions" tabindex="-1" inert allow="fullscreen" referrerpolicy="same-origin"></iframe>
-                  <button class="demo-activation" id="activate-demo" type="button" aria-label="Centralizar e explorar a demonstração" aria-describedby="demo-instructions"><span class="sr-only">Explorar demonstração</span></button>
-                  <div class="demo-error" hidden><p>A demonstração não carregou.</p><a href="/demos/nival/" target="_blank" rel="noopener">Abrir o projeto em outra aba</a></div>
-                </div>
-              </div>
+        <div class="hero-content">
+          <p class="hero-kicker hero-secondary">AI ENGINEER · EXPERIÊNCIAS DIGITAIS</p>
+          <h1 class="hero-title" id="hero-title" aria-label="Meu portfólio"><span class="hero-piece">Meu</span> <span class="hero-piece hero-piece-accent">portfólio.</span></h1>
+          <div class="hero-support">
+            <p class="hero-name hero-secondary">André Luiz Gimenez da Silva</p>
+            <p class="hero-role hero-secondary">AI Engineer</p>
+            <p class="hero-description hero-secondary">Estudante de Engenharia de Software, criando experiências digitais com inteligência artificial, cuidado visual e curiosidade técnica.</p>
+            <div class="theme-stage hero-secondary">
+            <div class="theme-toggle" role="group" aria-label="Tema visual">
+              <span class="theme-track" aria-hidden="true"></span>
+              <span class="selection-lens" aria-hidden="true"></span>
+              <button type="button" data-theme-choice="day" aria-pressed="true">
+                <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span>Diurno</span>
+              </button>
+              <button type="button" data-theme-choice="night" aria-pressed="false">
+                <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Noturno</span>
+              </button>
             </div>
-            <div class="demo-links"><button class="glass-surface" type="button" id="expand-demo"><span>Ampliar demonstração</span> <span aria-hidden="true">↗</span></button><button class="glass-surface" type="button" id="restart-demo"><span>Voltar ao início</span></button></div>
-            <p class="sr-only" id="demo-announcement" aria-live="polite">Visualização de celular selecionada.</p>
+            </div>
           </div>
         </div>
-        <details class="project-details"><summary>Desenvolvimento do projeto <span aria-hidden="true">+</span></summary><div class="details-content"><div><h3>Arquitetura</h3><p>Planejamento arquitetural com IA e construção da aplicação por etapas.</p></div><div><h3>UI/UX</h3><p>Aplicação mobile-first e responsiva, com interfaces próprias para celular e computador.</p></div><div><h3>Refinamento</h3><p>Implementação, refinamento da interface e debugging com IA ao longo do desenvolvimento.</p></div></div></details>
-      </article>
-      <article class="project game-project" id="game" aria-labelledby="game-title">
-        <div class="project-intro">
-          <div class="project-heading"><h2 id="game-title"><span class="project-name" data-animate-text><span class="title-line">Game</span> <span class="title-line">Development</span></span></h2></div>
-          <div class="project-copy"><p data-animate-text>Um jogo em desenvolvimento na Unreal Engine, <strong>construído integralmente com IA e MCP</strong>, com arquitetura, planejamento por etapas, implementação e refinamento contínuo.</p><ul class="technology-list" aria-label="Tecnologias do desenvolvimento do jogo"><li>Unreal Engine</li><li>IA</li><li>MCP</li></ul></div>
-        </div>
-        <div class="game-media glass-surface media-reveal">
-          <video id="game-video" poster="/portfolio/roda-roda-poster.jpg" width="1920" height="1080" loop muted playsinline preload="none" aria-label="Demonstração do desenvolvimento na Unreal Engine"><source src="/portfolio/roda-roda.mp4" data-src="/portfolio/roda-roda.mp4" type="video/mp4">Seu navegador não reproduz este vídeo. <a href="/portfolio/roda-roda.mp4">Abrir demonstração</a></video>
-          <button class="video-toggle glass-surface" id="video-toggle" type="button" aria-label="Reproduzir demonstração"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="play-symbol" d="m9 5 10 7-10 7V5Z" fill="currentColor"/><path class="pause-symbol" d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3"/></svg><span>Reproduzir</span></button>
-          <span class="video-duration glass-surface"><span>12,5 s · sem áudio</span></span>
-        </div>
-      </article>
+        <div class="hero-footer" aria-hidden="true"><span></span></div>
+      </div>
     </section>
   </main>
-  <footer class="site-footer wrap" id="contato">
-    <p class="contact-label">WhatsApp</p>
-    <a class="whatsapp-link" href="https://wa.me/5544988448253" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp: +55 44 9 8844-8253 (abre em uma nova aba)">
-      <span class="contact-phone"><span class="phone-country">+55</span><span>44 9 8844-8253</span></span>
-      <span class="whatsapp-symbol glass-surface"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.7a9 9 0 0 1-13.4 7.9L3 21l1.5-4.5A9 9 0 1 1 21 11.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 7.5c-.3-.6-.6-.6-.9-.6h-.4c-.3 0-.6.1-.8.5-.4.6-.5 1.2-.4 2 .3 1.2 1.2 2.5 2.7 4 1 1 2.1 1.6 3.5 2 .8.2 1.3.3 1.8.1.6-.2 1.1-.9 1.2-1.5 0-.2-.1-.4-.4-.5l-1.8-.9c-.3-.1-.5-.1-.7.2l-.8.9c-.2.2-.4.2-.6.1-1.2-.6-2.2-1.4-2.9-2.5-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.1-.7Z" fill="currentColor"/></svg></span>
-    </a>
-    <div class="footer-bottom"><a href="mailto:andreluizgimenezdasilva@gmail.com">andreluizgimenezdasilva@gmail.com</a><a href="#inicio">Voltar ao início ↑</a></div>
-  </footer>
 </body>
 </html>
