@@ -29,7 +29,7 @@ function initRevealMotion() {
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     const isTitle = element.classList.contains('project-name');
-    const baseDelay = isTitle ? 0 : element.classList.contains('project-subtitle') ? 220 : 90;
+    const baseDelay = isTitle ? 0 : 90;
     let index = 0;
     nodes.forEach(node => {
       const fragment = document.createDocumentFragment();
@@ -44,7 +44,7 @@ function initRevealMotion() {
       node.replaceWith(fragment);
     });
   });
-  const targets = [...document.querySelectorAll('.identity, .theme-toggle, .project-kind, .project-heading h2, .project-copy > p, .technology-list, .device-controls, .demo-instructions, .media-reveal, .demo-links, .project-details, .details-content > div, .contact-label, .contact-phone, .whatsapp-symbol, .footer-bottom')];
+  const targets = [...document.querySelectorAll('.identity, .theme-toggle, .project-heading h2, .project-copy > p, .technology-list, .device-controls, .demo-instructions, .media-reveal, .demo-links, .project-details, .details-content > div, .contact-label, .contact-phone, .whatsapp-symbol, .footer-bottom')];
   targets.forEach(element => element.setAttribute('data-reveal', ''));
   document.querySelectorAll('.project-intro').forEach(intro => {
     intro.querySelector('h2').style.setProperty('--reveal-delay', '80ms');

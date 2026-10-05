@@ -1,6 +1,6 @@
 # Portfólio — André Gimenez
 
-Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total. As descrições acima das mídias tratam apenas dos projetos. A página usa os títulos do currículo e não apresenta os nomes próprios dos projetos.
+Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total. As descrições acima das mídias tratam apenas dos projetos. Os títulos são E-commerce e Game Development, sem rótulos ou subtítulos técnicos. Os controles sob a moldura são Ampliar demonstração e Voltar ao início. A página não apresenta os nomes próprios dos projetos.
 
 O visual Liquid Glass usa branco tonalizado como base, azul escuro acinzentado nos destaques maiores, azul claro apenas nos pequenos detalhes e texto preto ou branco conforme a superfície. As bordas têm reflexos prismáticos discretos e refração do fundo em Chromium, com desfoque como fallback nos demais motores. O contato destaca o telefone em tamanho grande com link para WhatsApp.
 

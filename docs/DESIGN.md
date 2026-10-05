@@ -2,7 +2,7 @@
 
 Página focada em dois projetos, com prioridade para computador e adaptação para celular. O visitante deve encontrar imediatamente as demonstrações. O currículo contém a apresentação profissional; não repetir blocos de biografia, processo, slogans ou uma chamada grande de contato.
 
-Os títulos públicos seguem o currículo: **E-commerce | AI-Driven Development** e **Game Development | Unreal Engine + MCP**. Não apresentar os nomes próprios dos projetos. Os caminhos técnicos dos assets e da demonstração podem conservar seus nomes originais.
+Os títulos públicos são apenas **E-commerce** e **Game Development**, sem rótulos acima nem subtítulos técnicos. As descrições apresentam desenvolvimento com IA e Unreal Engine/MCP. Não apresentar os nomes próprios dos projetos. Os caminhos técnicos dos assets e da demonstração podem conservar seus nomes originais. Sob a demonstração, manter apenas Ampliar demonstração e Voltar ao início, nessa ordem.
 
 Estética Liquid Glass: branco tonalizado predominante (`#f4f6f7`), azul escuro acinzentado (`#415b69`) nos destaques maiores e azul claro (`#86b9ce`) apenas nos pequenos detalhes. Texto preto no fundo claro e branco nas superfícies escuras. O fundo contínuo usa variações neutras discretas, sem lavanda. O vidro aparece na navegação fixa, no seletor, no controle Diurno/Noturno, nas molduras e nos controles; não vira um cartão para cada seção. O tema Noturno troca o canvas por azul-marinho quase preto e preserva os mesmos acentos azuis e óptica do vidro. A página principal usa SF Pro disponível localmente no sistema Apple, com fallback de sistema em outras plataformas. Nenhum arquivo da fonte Apple é distribuído ou baixado pelo portfólio.
 
