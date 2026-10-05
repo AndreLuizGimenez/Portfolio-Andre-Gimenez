@@ -1,13 +1,15 @@
-# Direção da primeira versão
+# Direção atual
 
-Portfólio profissional para leitura e exploração, com composição prioritária em computador e conteúdo conciso. Público: pessoas avaliando projetos, modo de trabalho e oportunidades de colaboração.
+Página focada em dois projetos, com prioridade para computador e adaptação para celular. O visitante deve encontrar imediatamente as demonstrações. O currículo contém a apresentação profissional; não repetir blocos de biografia, processo, slogans ou uma chamada grande de contato.
 
-Paleta: papel frio `#f7f9fc`, texto azul profundo `#192942`, texto secundário `#58677c`, azul de ação `#2758de`, divisórias `#dae1eb`, palco de demonstração `#e6edf8`.
+Os títulos públicos seguem o currículo: **E-commerce | AI-Driven Development** e **Game Development | Unreal Engine + MCP**. Não apresentar os nomes próprios dos projetos. Os caminhos técnicos dos assets e da demonstração podem conservar seus nomes originais.
 
-Tipografia: Manrope variável, com hierarquia por tamanho e peso. As grandes frases apoiam uma apresentação objetiva; nenhuma competência ou resultado deve ser inventado para preencher o layout.
+Paleta contínua, sem linhas divisórias ou cartões para separar seções: fundo `#f5f5f7`, texto `#1d1d1f`, secundário `#6e6e73`, ação `#0071e3` e molduras em grafite. Tipografia nativa de sistema da Apple em macOS/iOS, com fontes de sistema equivalentes nas outras plataformas.
 
-Layout: abertura tipográfica compacta; projeto web interativo; vídeo do jogo; processo; apresentação breve; contato. O Nival deve aparecer exatamente uma vez. Desktop usa colunas e uma janela ampla; celular preserva a ordem da leitura e mantém controles disponíveis.
+A explicação de cada projeto fica acima da mídia. O vídeo ocupa toda a largura; a demonstração web aparece exatamente uma vez, começa em um celular maior e se expande para uma moldura de computador. O rodapé contém apenas contato e retorno ao início.
 
-Movimento: concentre a composição na mudança do celular para computador, preservando continuidade espacial. Interações respondem sem exagero. Não acrescente efeitos em loop nem animações de entrada para cada seção. Respeite movimento reduzido e navegação por teclado.
+Movimento: entradas suaves com deslocamento e opacidade; mídia com escala discreta na entrada; seleção de formato com indicador deslizante; expansão da mesma moldura; respostas ao hover e foco. Não mover a moldura continuamente durante a interação. Respeitar movimento reduzido e navegação por teclado. O vídeo reproduz em loop e pausa fora da tela.
+
+Na escolha de um formato, a demonstração sempre retorna à primeira tela. A instrução acima da moldura orienta mouse ou toque conforme o dispositivo.
 
 Referências consultadas: Sites building e hosting; [Frontend Design](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md); orientações de [animate](https://github.com/pbakaus/impeccable/blob/main/skill/reference/animate.md) do Impeccable. As skills externas foram lidas como orientações; não foram instaladas globalmente.

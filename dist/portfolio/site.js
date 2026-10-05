@@ -1,6 +1,31 @@
 'use strict';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function initRevealMotion() {
+  if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
+  const targets = [...document.querySelectorAll('.identity, .site-header nav, .project-heading, .project-copy, .demo-area, .game-media, .concept-note, .site-footer')];
+  targets.forEach(element => element.setAttribute('data-reveal', ''));
+  document.querySelectorAll('.identity, .site-header nav, #ecommerce .project-heading, #ecommerce .project-copy').forEach((element, index) => {
+    element.style.setProperty('--reveal-delay', `${index * 100}ms`);
+  });
+  document.documentElement.classList.add('motion-ready');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-revealed');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: .08, rootMargin: '0px 0px -32px 0px' });
+  targets.forEach(element => observer.observe(element));
+  reducedMotion.addEventListener('change', () => {
+    if (!reducedMotion.matches) return;
+    targets.forEach(element => element.classList.add('is-revealed'));
+    observer.disconnect();
+  });
+}
+initRevealMotion();
+
 const showcase = document.querySelector('#nival-showcase');
 const frame = document.querySelector('#device-frame');
 const screen = document.querySelector('#device-screen');

@@ -1,6 +1,6 @@
 # Portfólio — André Gimenez
 
-Primeira versão do portfólio profissional, com prioridade para computador e adaptação para celular. O Nival aparece uma única vez como demonstração interativa: começa dentro de um celular, pode mudar para uma janela de computador e tem opção de tela cheia. O Roda Roda apresenta o vídeo fornecido pelo usuário.
+Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total, com a explicação acima. A página usa os títulos do currículo e não apresenta os nomes próprios dos projetos.
 
 ## Prévia local
 
@@ -37,6 +37,6 @@ O currículo e o contexto da vaga foram usados apenas neste projeto. Nenhum arqu
 
 ## Movimento
 
-A principal transição é a expansão da moldura do Nival, com uma única instância do iframe. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. Preferência por movimento reduzido remove a expansão espacial e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
+As entradas de conteúdo usam opacidade, deslocamento e escala discreta. O seletor tem indicador deslizante e a moldura se expande com uma única instância do iframe. A escolha de cada formato retorna ao início pelos controles da demonstração. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. Preferência por movimento reduzido remove a expansão espacial e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
 
-Fonte Manrope reutilizada com licença OFL em `dist/portfolio/manrope-OFL.txt`.
+Tipografia principal: fontes de sistema da Apple via `-apple-system` e `BlinkMacSystemFont`, com fallback de sistema em outras plataformas. Não há download de fontes para a página principal.
