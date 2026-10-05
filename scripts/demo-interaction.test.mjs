@@ -1,20 +1,32 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { maximumFrameWidth, centeredScrollTop, demoEndState, demoBoundaryState, createDemoInteraction } from '../dist/portfolio/demo-interaction.mjs';
+import { maximumFrameWidth, centeredScrollTop, demoEndState, demoBoundaryState, createDemoInteraction, MOBILE_VIEWPORT } from '../dist/portfolio/demo-interaction.mjs';
 
 test('phone including its bezel fits short, mobile and desktop viewports above the fixed navigation', () => {
   for (const [width, height, navBottom, verticalChrome, horizontalChrome] of [
     [320, 568, 69, 35, 18], [390, 844, 69, 35, 18], [844, 390, 80, 38, 22],
     [1440, 900, 86, 38, 22], [1920, 1080, 86, 38, 22], [320, 300, 69, 35, 18]
   ]) {
-    const maxWidth = maximumFrameWidth({ height, navBottom, verticalChrome, horizontalChrome, ratio: 393 / 852 });
-    const phoneWidth = Math.min(430, width - 36, maxWidth);
-    const phoneHeight = (phoneWidth - horizontalChrome) * 852 / 393 + verticalChrome;
+    const maxWidth = maximumFrameWidth({ height, navBottom, verticalChrome, horizontalChrome, ratio: MOBILE_VIEWPORT.width / MOBILE_VIEWPORT.height });
+    const phoneWidth = Math.min(MOBILE_VIEWPORT.maxFrameWidth, width - 36, maxWidth);
+    const phoneHeight = (phoneWidth - horizontalChrome) * MOBILE_VIEWPORT.height / MOBILE_VIEWPORT.width + verticalChrome;
     const top = (height - phoneHeight) / 2;
     assert.ok(top > navBottom, `${width}×${height}: phone top ${top}, navigation ${navBottom}`);
     assert.ok(top + phoneHeight < height);
     const target = centeredScrollTop({ scrollTop: 500, top: 300, height: phoneHeight, viewportHeight: height });
     assert.ok(Math.abs((500 + 300 - target + phoneHeight / 2) - height / 2) < .01);
+  }
+});
+
+test('the wider phone preserves its height where horizontal space is available', () => {
+  for (const height of [568, 720, 900, 1080, 1600]) {
+    const dimensions = { height, navBottom: 86, verticalChrome: 38, horizontalChrome: 22 };
+    const oldWidth = Math.min(430, maximumFrameWidth({ ...dimensions, ratio: 393 / 852 }));
+    const newWidth = Math.min(MOBILE_VIEWPORT.maxFrameWidth, maximumFrameWidth({ ...dimensions, ratio: MOBILE_VIEWPORT.width / MOBILE_VIEWPORT.height }));
+    const oldHeight = (oldWidth - 22) * 852 / 393 + 38;
+    const newHeight = (newWidth - 22) * MOBILE_VIEWPORT.height / MOBILE_VIEWPORT.width + 38;
+    assert.ok(newWidth > oldWidth * 1.04 && newWidth < oldWidth * 1.06);
+    assert.ok(Math.abs(newHeight - oldHeight) < 1);
   }
 });
 

@@ -24,12 +24,13 @@
     <a class="identity" href="#inicio"><span>André Luiz Gimenez da Silva</span><span class="identity-role">AI Engineer</span></a>
     <div class="header-tools">
       <div class="theme-toggle glass-surface" role="group" aria-label="Tema visual">
+        <span class="selection-lens glass-surface" aria-hidden="true"></span>
         <button type="button" data-theme-choice="day" aria-pressed="true"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Diurno</span></button>
         <button type="button" data-theme-choice="night" aria-pressed="false"><svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Noturno</span></button>
       </div>
     </div>
   </header>
-  <nav class="site-nav glass-surface" aria-label="Navegação principal"><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
+  <nav class="site-nav glass-surface" aria-label="Navegação principal"><span class="selection-lens glass-surface" aria-hidden="true"></span><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
   <main id="conteudo">
     <section class="projects wrap" id="projetos" aria-labelledby="projects-title">
       <h1 class="sr-only" id="projects-title">Projetos de André Luiz Gimenez da Silva</h1>
@@ -40,9 +41,10 @@
         </div>
         <div class="showcase" id="nival-showcase" data-view="mobile">
           <div class="demo-area">
-            <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
+            <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><span class="selection-lens glass-surface" aria-hidden="true"></span><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
             <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Clique na moldura para centralizar<br>e explorar o site. Clique fora para sair.</span><span class="touch-hint">Toque na moldura para centralizar<br>e explorar o site. Toque fora para sair.</span></p>
             <div class="device-space media-reveal">
+              <div class="device-jelly glass-surface" aria-hidden="true"></div>
               <div class="device-frame glass-surface" id="device-frame">
                 <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface"><span>Fechar tela cheia</span></button>
                 <div class="device-camera" aria-hidden="true"></div>

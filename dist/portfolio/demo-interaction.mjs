@@ -1,3 +1,5 @@
+export const MOBILE_VIEWPORT = Object.freeze({ width: 414, height: 852, maxFrameWidth: 452 });
+
 export function maximumFrameWidth({ height, navBottom, verticalChrome, horizontalChrome, ratio }) {
   const margin = Math.min(Math.max(24, navBottom + 12), height * .3);
   const available = Math.max(verticalChrome + 1, height - margin * 2);

@@ -1,14 +1,21 @@
 'use strict';
 
-import { createDemoInteraction, maximumFrameWidth } from './demo-interaction.mjs';
+import { createDemoInteraction, maximumFrameWidth, MOBILE_VIEWPORT } from './demo-interaction.mjs';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const themeButtons = [...document.querySelectorAll('[data-theme-choice]')];
+const themeToggle = document.querySelector('.theme-toggle');
+function positionThemeLens() {
+  const selected = themeButtons.find(button => button.getAttribute('aria-pressed') === 'true');
+  themeToggle.style.setProperty('--theme-x', `${selected.offsetLeft}px`);
+  themeToggle.style.setProperty('--theme-width', `${selected.offsetWidth}px`);
+}
 function applyTheme(theme, persist = true) {
   const nextTheme = theme === 'night' ? 'night' : 'day';
   document.documentElement.dataset.theme = nextTheme;
   themeButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === nextTheme)));
+  positionThemeLens();
   if (persist) {
     try { window.localStorage.setItem('portfolio-theme', nextTheme); } catch {}
   }
@@ -20,6 +27,7 @@ try {
 } catch {}
 applyTheme(initialTheme, false);
 themeButtons.forEach(button => button.addEventListener('click', () => applyTheme(button.dataset.themeChoice)));
+new ResizeObserver(positionThemeLens).observe(themeToggle);
 
 function initRevealMotion() {
   if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
@@ -155,7 +163,7 @@ window.addEventListener('message', event => {
   }
   stopOuterMomentum();
   if (document.fullscreenElement) return;
-  const scale = data.input === 'touch' ? screen.clientWidth / (view === 'mobile' ? 393 : 1440) : 1;
+  const scale = data.input === 'touch' ? screen.clientWidth / (view === 'mobile' ? MOBILE_VIEWPORT.width : 1440) : 1;
   if (data.phase === 'end') {
     if (!reducedMotion.matches && Number.isFinite(data.velocity)) {
       const velocity = Math.max(-2, Math.min(2, data.velocity * scale));
@@ -231,20 +239,20 @@ function fitDemo() {
     const nav = document.querySelector('.site-nav');
     const width = maximumFrameWidth({ height: window.visualViewport?.height || window.innerHeight,
       navBottom: parseFloat(getComputedStyle(nav).top) + nav.offsetHeight,
-      verticalChrome, horizontalChrome, ratio: view === 'mobile' ? 393 / 852 : 1440 / 900 });
+      verticalChrome, horizontalChrome, ratio: view === 'mobile' ? MOBILE_VIEWPORT.width / MOBILE_VIEWPORT.height : 1440 / 900 });
     frame.style.setProperty('--frame-max-width', `${width}px`);
   }
-  const logicalWidth = view === 'mobile' ? 393 : 1440;
-  const logicalHeight = view === 'mobile' ? 852 : 900;
+  const logicalWidth = view === 'mobile' ? MOBILE_VIEWPORT.width : 1440;
+  const logicalHeight = view === 'mobile' ? MOBILE_VIEWPORT.height : 900;
   const scale = screen.clientWidth / logicalWidth;
   screen.style.height = `${Math.round(logicalHeight * scale)}px`;
   demo.style.width = `${logicalWidth}px`;
   demo.style.height = `${logicalHeight}px`;
   demo.style.transform = `scale(${scale})`;
   const space = frame.parentElement;
-  space.style.setProperty('--halo-width', `${frame.offsetWidth}px`);
-  space.style.setProperty('--halo-height', `${frame.offsetHeight}px`);
-  space.style.setProperty('--halo-radius', getComputedStyle(frame).borderTopLeftRadius);
+  space.style.setProperty('--device-width', `${frame.offsetWidth}px`);
+  space.style.setProperty('--device-height', `${frame.offsetHeight}px`);
+  space.style.setProperty('--device-radius', getComputedStyle(frame).borderTopLeftRadius);
 }
 
 function changeView(nextView) {
