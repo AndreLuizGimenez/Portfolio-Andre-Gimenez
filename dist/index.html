@@ -8,22 +8,22 @@
   <meta name="description" content="Portfólio de André Luiz Gimenez da Silva, AI Engineer.">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23234c73'/%3E%3Cpath d='M10 29 20 10 30 29M14 23h12' fill='none' stroke='white' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="preload" href="/portfolio/fonts/manrope-variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/portfolio/style.css?v=4">
-  <script src="/portfolio/site.js?v=4" type="module"></script>
-  <script src="/portfolio/glass.js?v=4" defer></script>
+  <link rel="stylesheet" href="/portfolio/style.css?v=5">
+  <script src="/portfolio/site.js?v=5" type="module"></script>
+  <script src="/portfolio/glass.js?v=5" defer></script>
 </head>
 <body>
   <svg class="glass-filters" aria-hidden="true" focusable="false"><defs id="glass-lenses"></defs></svg>
-  <div class="site-backdrop" aria-hidden="true">
-    <svg class="backdrop-waves" viewBox="0 0 1440 900" preserveAspectRatio="none">
-      <path class="wave-back" d="M-80 740 C180 490 420 730 670 638 C930 540 1110 406 1520 590 L1520 980 L-80 980Z"/>
-      <path class="wave-middle" d="M-80 782 C210 595 389 854 708 714 C980 594 1180 656 1520 471 L1520 980 L-80 980Z"/>
-      <path class="wave-front" d="M-80 895 C270 708 536 980 867 793 C1124 648 1310 777 1520 687 L1520 980 L-80 980Z"/>
-    </svg>
-  </div>
   <a class="skip-link" href="#inicio">Pular para a abertura</a>
-  <main id="conteudo">
-    <section class="hero-section" id="inicio" aria-labelledby="hero-title">
+  <main class="stack" id="conteudo">
+    <section class="panel hero-section" id="inicio" aria-labelledby="hero-title">
+      <div class="site-backdrop" aria-hidden="true">
+        <svg class="backdrop-waves" viewBox="0 0 1440 900" preserveAspectRatio="none">
+          <path class="wave-back" d="M-80 740 C180 490 420 730 670 638 C930 540 1110 406 1520 590 L1520 980 L-80 980Z"/>
+          <path class="wave-middle" d="M-80 782 C210 595 389 854 708 714 C980 594 1180 656 1520 471 L1520 980 L-80 980Z"/>
+          <path class="wave-front" d="M-80 895 C270 708 536 980 867 793 C1124 648 1310 777 1520 687 L1520 980 L-80 980Z"/>
+        </svg>
+      </div>
       <div class="hero-shell">
         <div class="hero-topline hero-secondary" aria-label="Identificação do portfólio">
           <span class="hero-mark" aria-hidden="true">AG</span>
@@ -36,16 +36,16 @@
             <p class="hero-name hero-secondary">André Luiz Gimenez da Silva</p>
             <p class="hero-role hero-secondary">AI Engineer</p>
             <p class="hero-description hero-secondary">Estudante de Engenharia de Software, criando experiências digitais com inteligência artificial, cuidado visual e curiosidade técnica.</p>
-            <div class="theme-stage hero-secondary">
-            <div class="theme-toggle" role="group" aria-label="Tema visual">
-              <span class="theme-track" aria-hidden="true"></span>
+            <div class="switch-stage theme-stage hero-secondary">
+            <div class="glass-switch theme-toggle" role="group" aria-label="Tema visual">
+              <span class="glass-track" aria-hidden="true"></span>
               <span class="selection-lens" aria-hidden="true"></span>
               <button type="button" data-theme-choice="day" aria-pressed="true">
-                <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <svg class="switch-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2v3M12 19v3M4.93 4.93l2.12 2.12M16.95 16.95l2.12 2.12M2 12h3M19 12h3M4.93 19.07l2.12-2.12M16.95 7.05l2.12-2.12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
                 <span>Diurno</span>
               </button>
               <button type="button" data-theme-choice="night" aria-pressed="false">
-                <svg class="theme-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg class="switch-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.2 14.3A8.8 8.8 0 0 1 9.7 3.8 8.8 8.8 0 1 0 20.2 14.3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <span>Noturno</span>
               </button>
             </div>
@@ -53,6 +53,75 @@
           </div>
         </div>
         <div class="hero-footer" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+    <section class="panel project-section is-veiled" id="ecommerce" aria-labelledby="ecommerce-title" data-view="mobile">
+      <div class="project-backdrop" aria-hidden="true">
+        <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
+          <path class="dune-far" d="M-80 210 C170 110 420 270 570 450 C700 610 830 760 900 980 L-80 980Z"/>
+          <path class="dune-mid" d="M-80 500 C130 430 330 550 450 700 C530 800 600 890 640 980 L-80 980Z"/>
+          <path class="dune-near" d="M-80 760 C50 720 190 790 280 880 C315 915 340 950 355 980 L-80 980Z"/>
+        </svg>
+      </div>
+      <div class="project-shell">
+        <div class="project-copy">
+          <p class="project-index reveal">02 / PROJETO</p>
+          <h2 class="project-title reveal" id="ecommerce-title">E-commerce</h2>
+          <p class="project-lead reveal">Página de produto com uma cena 3D guiada pela rolagem.</p>
+          <p class="project-description reveal">Aplicação mobile-first e responsiva, <strong>construída com IA</strong> do planejamento arquitetural à implementação, UI/UX, refinamento e debugging.</p>
+          <ul class="technology-list reveal" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul>
+          <div class="switch-stage view-stage reveal">
+            <div class="glass-switch view-switch" role="group" aria-label="Formato da demonstração">
+              <span class="glass-track" aria-hidden="true"></span>
+              <span class="selection-lens" aria-hidden="true"></span>
+              <button type="button" data-view-choice="desktop" aria-pressed="false">
+                <svg class="switch-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="12" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M8.5 20h7M12 16.5V20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span>Computador</span>
+              </button>
+              <button type="button" data-view-choice="mobile" aria-pressed="true">
+                <svg class="switch-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.75" width="10" height="18.5" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10.75 5.7h2.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span>Celular</span>
+              </button>
+            </div>
+          </div>
+          <p class="demo-caption reveal" id="demo-caption">
+            <span class="caption-idle"><span class="for-pointer">Clique na tela para explorar.</span><span class="for-touch">Toque na tela para explorar.</span></span>
+            <span class="caption-loading">Carregando a demonstração…</span>
+            <span class="caption-active"><span class="for-pointer">Esc ou clique fora para sair.</span><span class="for-touch">Toque fora para sair.</span></span>
+          </p>
+          <p class="sr-only demo-announcement" aria-live="polite"></p>
+        </div>
+        <div class="device-zone">
+          <div class="device-stage">
+            <div class="device-flight">
+              <div class="device">
+                <div class="device-back" aria-hidden="true"><span class="device-lenses"><i></i><i></i><i></i></span></div>
+                <i class="device-slab" aria-hidden="true"></i><i class="device-slab" aria-hidden="true"></i><i class="device-slab" aria-hidden="true"></i>
+                <i class="device-side device-side-left" aria-hidden="true"></i><i class="device-side device-side-right" aria-hidden="true"></i>
+                <i class="device-key device-key-action" aria-hidden="true"></i><i class="device-key device-key-up" aria-hidden="true"></i><i class="device-key device-key-down" aria-hidden="true"></i><i class="device-key device-key-power" aria-hidden="true"></i>
+                <div class="device-frame">
+                  <div class="window-bar" aria-hidden="true"><i></i><i></i><i></i><span class="window-title">E-commerce · demonstração</span></div>
+                  <div class="device-screen">
+                    <div class="status-bar" aria-hidden="true">
+                      <span>9:41</span>
+                      <svg class="status-icons" viewBox="0 0 68 14"><rect y="9" width="3" height="5" rx="1"/><rect x="5" y="6" width="3" height="8" rx="1"/><rect x="10" y="3" width="3" height="11" rx="1"/><rect x="15" width="3" height="14" rx="1"/><path d="M24.6 5.3a9 9 0 0 1 12 0M27 8.2a5.4 5.4 0 0 1 7.2 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="30.6" cy="11.6" r="1.7"/><rect x="43.6" y="1.1" width="20.3" height="11.8" rx="3.6" fill="none" stroke="currentColor" stroke-opacity=".42"/><rect x="45.6" y="3.1" width="16.3" height="7.8" rx="2"/><path d="M65.8 5.2v3.6" fill="none" stroke="currentColor" stroke-opacity=".42" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </div>
+                    <div class="demo-viewport">
+                      <div class="demo-canvas" data-src="/demos/nival/" data-title="Demonstração interativa do e-commerce">
+                        <img class="demo-poster poster-mobile" src="/portfolio/nival-mobile.webp" width="828" height="1704" alt="" decoding="async">
+                        <img class="demo-poster poster-desktop" data-src="/portfolio/nival-desktop.webp" width="2160" height="1350" alt="" decoding="async">
+                      </div>
+                      <span class="demo-progress" aria-hidden="true"></span>
+                      <div class="demo-error" hidden><p>A demonstração não carregou.</p><a href="/demos/nival/" target="_blank" rel="noopener">Abrir o projeto em outra aba</a></div>
+                    </div>
+                    <span class="dynamic-island" aria-hidden="true"></span>
+                    <button class="demo-activation" type="button" aria-label="Explorar a demonstração do e-commerce" aria-describedby="demo-caption"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
