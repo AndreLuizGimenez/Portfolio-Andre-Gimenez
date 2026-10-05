@@ -16,24 +16,26 @@
   <script src="/portfolio/site.js" defer></script>
 </head>
 <body>
+  <svg class="glass-filters" aria-hidden="true" focusable="false"><defs><filter id="glass-refraction" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".012 .018" numOctaves="2" seed="7" result="texture"/><feGaussianBlur in="texture" stdDeviation="2" result="lens"/><feDisplacementMap in="SourceGraphic" in2="lens" scale="10" xChannelSelector="R" yChannelSelector="G"/></filter></defs></svg>
+  <div class="site-backdrop" aria-hidden="true"><div class="ambient-orbit orbit-one"></div><div class="ambient-orbit orbit-two"></div><div class="ambient-orbit orbit-three"></div></div>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <header class="site-header wrap" id="inicio">
     <a class="identity" href="#inicio"><span>André Luiz Gimenez da Silva</span><span class="identity-role">AI Engineer</span></a>
-    <nav aria-label="Navegação principal"><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
+    <nav class="glass-surface" aria-label="Navegação principal"><a href="#ecommerce">E-commerce</a><a href="#game">Game Development</a><a class="nav-contact" href="#contato">Contato</a></nav>
   </header>
   <main id="conteudo">
     <section class="projects wrap" id="projetos" aria-labelledby="projects-title">
       <h1 class="sr-only" id="projects-title">Projetos de André Luiz Gimenez da Silva</h1>
       <article class="project" id="ecommerce" aria-labelledby="ecommerce-title">
-        <div class="project-heading"><div><p class="project-kind">Web · Experiência de produto</p><h2 id="ecommerce-title">E-commerce <span>| AI-Driven Development</span></h2></div><span class="project-status">Em desenvolvimento</span></div>
-        <div class="project-copy"><p>Aplicação mobile-first e responsiva, construída com IA do planejamento arquitetural à implementação, UI/UX e refinamento.</p><p>Uma experiência de produto 3D guiada pela rolagem, com interfaces próprias para celular e computador.</p><ul class="technology-list" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul></div>
+        <div class="project-heading"><div><p class="project-kind">Web · Experiência de produto</p><h2 id="ecommerce-title" data-animate-text>E-commerce <span class="project-subtitle">| AI-Driven Development</span></h2></div><span class="project-status glass-surface">Em desenvolvimento</span></div>
+        <div class="project-copy"><p data-animate-text>Aplicação mobile-first e responsiva, construída com IA do planejamento arquitetural à implementação, UI/UX, refinamento e debugging.</p><ul class="technology-list" aria-label="Tecnologias do e-commerce"><li>React</li><li>TypeScript</li><li>Three.js</li><li>GSAP</li></ul></div>
         <div class="showcase" id="nival-showcase" data-view="mobile">
           <div class="demo-area">
-            <div class="device-controls" role="group" aria-label="Formato da demonstração"><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
+            <div class="device-controls glass-surface" role="group" aria-label="Formato da demonstração"><button type="button" data-device="mobile" aria-pressed="true">Celular</button><button type="button" data-device="desktop" aria-pressed="false">Computador</button></div>
             <p class="demo-instructions" id="demo-instructions"><svg class="pointer-hint" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="6" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span class="pointer-hint">Coloque o cursor dentro da moldura<br>para clicar e rolar o site.</span><span class="touch-hint">Toque e deslize dentro da moldura<br>para explorar o site.</span></p>
             <div class="device-space">
-              <div class="device-frame" id="device-frame">
-                <button type="button" id="exit-fullscreen" class="fullscreen-exit">Fechar tela cheia</button>
+              <div class="device-frame glass-surface" id="device-frame">
+                <button type="button" id="exit-fullscreen" class="fullscreen-exit glass-surface">Fechar tela cheia</button>
                 <div class="device-camera" aria-hidden="true"></div>
                 <div class="desktop-chrome" aria-hidden="true"><span></span><span></span><span></span><div>E-commerce · demonstração</div></div>
                 <div class="device-screen" id="device-screen">
@@ -43,25 +45,30 @@
                 </div>
               </div>
             </div>
-            <div class="demo-links"><button type="button" id="expand-demo">Ampliar demonstração <span aria-hidden="true">↗</span></button><a href="/demos/nival/" target="_blank" rel="noopener">Abrir em outra aba <span aria-hidden="true">↗</span><span class="sr-only">(abre em uma nova aba)</span></a><button type="button" id="restart-demo">Voltar ao início</button></div>
+            <div class="demo-links"><button class="glass-surface" type="button" id="expand-demo">Ampliar demonstração <span aria-hidden="true">↗</span></button><a class="glass-surface" href="/demos/nival/" target="_blank" rel="noopener">Abrir em outra aba <span aria-hidden="true">↗</span><span class="sr-only">(abre em uma nova aba)</span></a><button class="glass-surface" type="button" id="restart-demo">Voltar ao início</button></div>
             <p class="sr-only" id="demo-announcement" aria-live="polite">Visualização de celular selecionada.</p>
           </div>
         </div>
-        <details class="project-details"><summary>Por trás da experiência <span aria-hidden="true">+</span></summary><div class="details-content"><div><h3>Interface</h3><p>Composições próprias para celular e computador, com atenção à leitura, aos gestos e à navegação.</p></div><div><h3>Interação</h3><p>A rolagem revela as partes do produto em uma cena 3D reversível. A galeria permite explorar e ampliar as imagens.</p></div><div><h3>Refinamento</h3><p>Validação dos fluxos, ajustes de desempenho e alternativas para movimento reduzido e indisponibilidade do 3D.</p></div></div></details>
-        <p class="concept-note">Conceito em desenvolvimento. Nome e preço provisórios; compra ainda indisponível.</p>
+        <details class="project-details"><summary>Desenvolvimento do projeto <span aria-hidden="true">+</span></summary><div class="details-content"><div><h3>Arquitetura</h3><p>Planejamento arquitetural com IA e construção da aplicação por etapas.</p></div><div><h3>UI/UX</h3><p>Aplicação mobile-first e responsiva, com interfaces próprias para celular e computador.</p></div><div><h3>Refinamento</h3><p>Implementação, refinamento da interface e debugging com IA ao longo do desenvolvimento.</p></div></div></details>
       </article>
       <article class="project game-project" id="game" aria-labelledby="game-title">
-        <div class="project-heading"><div><p class="project-kind">Game · Experiência interativa</p><h2 id="game-title">Game Development <span>| Unreal Engine + MCP</span></h2></div><span class="project-status">Em desenvolvimento</span></div>
-        <div class="project-copy"><p>Um jogo em desenvolvimento na Unreal Engine, construído com IA e MCP do planejamento por etapas à implementação e ao refinamento contínuo.</p><p>A demonstração percorre o lobby, a personalização dos personagens, a roleta e a chegada ao palco.</p><ul class="technology-list" aria-label="Tecnologias do desenvolvimento do jogo"><li>Unreal Engine</li><li>IA</li><li>MCP</li></ul></div>
-        <div class="game-media">
+        <div class="project-heading"><div><p class="project-kind">Game · Experiência interativa</p><h2 id="game-title" data-animate-text>Game Development <span class="project-subtitle">| Unreal Engine + MCP</span></h2></div><span class="project-status glass-surface">Em desenvolvimento</span></div>
+        <div class="project-copy"><p data-animate-text>Um jogo em desenvolvimento na Unreal Engine, construído integralmente com IA e MCP, com arquitetura, planejamento por etapas, implementação e refinamento contínuo.</p><ul class="technology-list" aria-label="Tecnologias do desenvolvimento do jogo"><li>Unreal Engine</li><li>IA</li><li>MCP</li></ul></div>
+        <div class="game-media glass-surface">
           <video id="game-video" poster="/portfolio/roda-roda-poster.jpg" width="1920" height="1080" loop muted playsinline preload="none" aria-label="Demonstração do desenvolvimento na Unreal Engine"><source src="/portfolio/roda-roda.mp4" data-src="/portfolio/roda-roda.mp4" type="video/mp4">Seu navegador não reproduz este vídeo. <a href="/portfolio/roda-roda.mp4">Abrir demonstração</a></video>
-          <button class="video-toggle" id="video-toggle" type="button" aria-label="Reproduzir demonstração"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="play-symbol" d="m9 5 10 7-10 7V5Z" fill="currentColor"/><path class="pause-symbol" d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3"/></svg><span>Reproduzir</span></button>
-          <span class="video-duration">12,5 s · sem áudio</span>
+          <button class="video-toggle glass-surface" id="video-toggle" type="button" aria-label="Reproduzir demonstração"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path class="play-symbol" d="m9 5 10 7-10 7V5Z" fill="currentColor"/><path class="pause-symbol" d="M8 5v14M16 5v14" stroke="currentColor" stroke-width="3"/></svg><span>Reproduzir</span></button>
+          <span class="video-duration glass-surface">12,5 s · sem áudio</span>
         </div>
-        <p class="concept-note">Demonstração do protótipo com participantes simulados e interface de gravação ilustrativa.</p>
       </article>
     </section>
   </main>
-  <footer class="site-footer wrap" id="contato"><div class="footer-contact"><a href="mailto:andreluizgimenezdasilva@gmail.com">andreluizgimenezdasilva@gmail.com</a><a href="https://wa.me/5544988448253" target="_blank" rel="noopener">WhatsApp <span aria-hidden="true">↗</span><span class="sr-only">(abre em uma nova aba)</span></a></div><a href="#inicio">Voltar ao início ↑</a></footer>
+  <footer class="site-footer wrap" id="contato">
+    <p class="contact-label">WhatsApp</p>
+    <a class="whatsapp-link" href="https://wa.me/5544988448253" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp: +55 44 9 8844-8253 (abre em uma nova aba)">
+      <span class="contact-phone"><span class="phone-country">+55</span><span>44 9 8844-8253</span></span>
+      <span class="whatsapp-symbol glass-surface"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.7a9 9 0 0 1-13.4 7.9L3 21l1.5-4.5A9 9 0 1 1 21 11.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 7.5c-.3-.6-.6-.6-.9-.6h-.4c-.3 0-.6.1-.8.5-.4.6-.5 1.2-.4 2 .3 1.2 1.2 2.5 2.7 4 1 1 2.1 1.6 3.5 2 .8.2 1.3.3 1.8.1.6-.2 1.1-.9 1.2-1.5 0-.2-.1-.4-.4-.5l-1.8-.9c-.3-.1-.5-.1-.7.2l-.8.9c-.2.2-.4.2-.6.1-1.2-.6-2.2-1.4-2.9-2.5-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.1-.7Z" fill="currentColor"/></svg></span>
+    </a>
+    <div class="footer-bottom"><a href="mailto:andreluizgimenezdasilva@gmail.com">andreluizgimenezdasilva@gmail.com</a><a href="#inicio">Voltar ao início ↑</a></div>
+  </footer>
 </body>
 </html>

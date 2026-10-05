@@ -4,7 +4,25 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function initRevealMotion() {
   if (reducedMotion.matches || !('IntersectionObserver' in window)) return;
-  const targets = [...document.querySelectorAll('.identity, .site-header nav, .project-heading, .project-copy, .demo-area, .game-media, .concept-note, .site-footer')];
+  document.querySelectorAll('[data-animate-text]').forEach(element => {
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    let index = 0;
+    nodes.forEach(node => {
+      const fragment = document.createDocumentFragment();
+      (node.textContent.match(/\S+|\s+/g) || []).forEach(part => {
+        if (/^\s+$/.test(part)) { fragment.append(document.createTextNode(part)); return; }
+        const word = document.createElement('span');
+        word.className = 'word-reveal';
+        word.textContent = part;
+        word.style.setProperty('--word-delay', `${Math.min(index++ * 24, 360)}ms`);
+        fragment.append(word);
+      });
+      node.replaceWith(fragment);
+    });
+  });
+  const targets = [...document.querySelectorAll('.identity, .site-header nav, .project-heading, .project-copy, .demo-area, .game-media, .site-footer')];
   targets.forEach(element => element.setAttribute('data-reveal', ''));
   document.querySelectorAll('.identity, .site-header nav, #ecommerce .project-heading, #ecommerce .project-copy').forEach((element, index) => {
     element.style.setProperty('--reveal-delay', `${index * 100}ms`);
@@ -33,6 +51,60 @@ const demo = document.querySelector('#nival-demo');
 const poster = document.querySelector('#demo-poster');
 const viewButtons = [...document.querySelectorAll('[data-device]')];
 const announcement = document.querySelector('#demo-announcement');
+let outerMomentumFrame = 0;
+function stopOuterMomentum() {
+  cancelAnimationFrame(outerMomentumFrame);
+  outerMomentumFrame = 0;
+}
+function continueOuterTouch(velocity) {
+  let previous = performance.now();
+  const started = previous;
+  function tick(now) {
+    const elapsed = Math.min(32, now - previous);
+    previous = now;
+    velocity *= Math.exp(-elapsed / 170);
+    const before = window.scrollY;
+    window.scrollBy({ top: velocity * elapsed, behavior: 'instant' });
+    if (Math.abs(velocity) > .06 && now - started < 650 && Math.abs(window.scrollY - before) > .1) outerMomentumFrame = requestAnimationFrame(tick);
+    else outerMomentumFrame = 0;
+  }
+  outerMomentumFrame = requestAnimationFrame(tick);
+}
+window.addEventListener('message', event => {
+  if (event.origin !== window.location.origin || event.source !== demo.contentWindow) return;
+  const data = event.data;
+  if (!data || data.type !== 'portfolio:scroll' || !['wheel', 'touch'].includes(data.input) || !['move', 'end'].includes(data.phase)) return;
+  stopOuterMomentum();
+  if (document.fullscreenElement) return;
+  const scale = data.input === 'touch' ? screen.clientWidth / (view === 'mobile' ? 393 : 1440) : 1;
+  if (data.phase === 'end') {
+    if (!reducedMotion.matches && Number.isFinite(data.velocity)) {
+      const velocity = Math.max(-2, Math.min(2, data.velocity * scale));
+      if (Math.abs(velocity) > .12) continueOuterTouch(velocity);
+    }
+    return;
+  }
+  if (!Number.isFinite(data.delta)) return;
+  const delta = Math.max(-window.innerHeight, Math.min(window.innerHeight, data.delta * scale));
+  if (delta) window.scrollBy({ top: delta, behavior: 'instant' });
+});
+['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(type => window.addEventListener(type, stopOuterMomentum, { passive: true }));
+document.addEventListener('fullscreenchange', stopOuterMomentum);
+document.addEventListener('visibilitychange', stopOuterMomentum);
+
+if (window.matchMedia('(hover: hover)').matches && !reducedMotion.matches) {
+  document.querySelectorAll('.glass-surface').forEach(element => {
+    element.addEventListener('pointermove', event => {
+      const bounds = element.getBoundingClientRect();
+      element.style.setProperty('--glass-x', `${(event.clientX - bounds.left) / bounds.width * 100}%`);
+      element.style.setProperty('--glass-y', `${(event.clientY - bounds.top) / bounds.height * 100}%`);
+    }, { passive: true });
+    element.addEventListener('pointerleave', () => {
+      element.style.removeProperty('--glass-x');
+      element.style.removeProperty('--glass-y');
+    });
+  });
+}
 let view = 'mobile';
 let frameAnimation;
 let demoStarted = false;

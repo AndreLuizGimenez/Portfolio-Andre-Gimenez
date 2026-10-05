@@ -5,6 +5,7 @@
 import { useEffect, type RefObject } from 'react';
 import { nextScrollGate, scrollFrame, scrollNavigation, storyPageStops, WheelGesture, type Direction, type ScrollGate } from './scroll-gates';
 import { createMobileScrollController } from './mobile-scroll-controller';
+import { portfolioScrollHandoffEvent } from '../../portfolio-scroll-bridge';
 
 /** Feed navigation: one gesture advances one section or one phrase of the 3D story. */
 export function createScrollController(page: HTMLDivElement, onDestination?: (target: ScrollGate | undefined, settled: boolean) => void, canLeaveStoryEntrance?: () => boolean, closeSpecifications?: () => boolean, onFrame?: (y:number)=>void) {
@@ -393,6 +394,7 @@ export function createScrollController(page: HTMLDivElement, onDestination?: (ta
   window.addEventListener('keydown', keyboard, true);
   window.addEventListener('pointerdown', pointer, true);
   window.addEventListener('hashchange', bypass);
+  window.addEventListener(portfolioScrollHandoffEvent, bypass);
   return () => {
     stopped = true; bypass(); resizeObserver.disconnect(); observer.disconnect();
     html.classList.remove('scroll-managed');
@@ -407,6 +409,7 @@ export function createScrollController(page: HTMLDivElement, onDestination?: (ta
     window.removeEventListener('keydown', keyboard, true);
     window.removeEventListener('pointerdown', pointer, true);
     window.removeEventListener('hashchange', bypass);
+    window.removeEventListener(portfolioScrollHandoffEvent, bypass);
   };
 }
 

@@ -1,6 +1,8 @@
 # Portfólio — André Gimenez
 
-Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total, com a explicação acima. A página usa os títulos do currículo e não apresenta os nomes próprios dos projetos.
+Portfólio focado em dois projetos, com prioridade para computador e adaptação para celular. A demonstração do e-commerce aparece uma única vez: começa dentro de um celular maior, pode se expandir para uma janela de computador e tem opção de tela cheia. O vídeo de desenvolvimento na Unreal Engine fica em largura total. As descrições acima das mídias tratam apenas dos projetos. A página usa os títulos do currículo e não apresenta os nomes próprios dos projetos.
+
+O visual Liquid Glass usa fundo suave azul/lavanda, molduras translúcidas e reflexos discretos. O contato destaca o telefone em tamanho grande com link para WhatsApp.
 
 ## Prévia local
 
@@ -15,16 +17,21 @@ Abra `http://127.0.0.1:4173/`. O site principal é HTML/CSS/JavaScript estático
 ```sh
 python3 scripts/check-assets.py
 node --check dist/portfolio/site.js
+node --experimental-strip-types --test sources/nival/portfolio-scroll-bridge.test.mjs
 ```
+
+A suíte da ponte de rolagem tem 12 testes e requer Node.js 22.13 ou superior. Os testes usam stubs do DOM; não substituem a verificação dos gestos em um navegador.
 
 ## Arquivos principais
 
 - `dist/index.html`: conteúdo e estrutura do portfólio.
 - `dist/portfolio/style.css`: composição desktop, adaptações mobile, molduras e estados de interação.
-- `dist/portfolio/site.js`: alternância de formato, escala real do iframe, tela cheia e reprodução do vídeo.
+- `dist/portfolio/site.js`: revelação dos textos, alternância de formato, escala real do iframe, recepção da rolagem externa, tela cheia e reprodução do vídeo.
 - `dist/portfolio/roda-roda.mp4`: cópia do vídeo final fornecido pelo usuário.
 - `dist/demos/nival/`: exportação estática da experiência original, com componentes reais e recursos locais.
 - `sources/nival/`: fonte isolada e reproduzível da exportação; veja seu README antes de atualizar a demonstração.
+- `sources/nival/portfolio-scroll-bridge.ts`: ponte de wheel/touch da demonstração para o portfólio nas extremidades globais.
+- `sources/nival/portfolio-scroll-bridge.test.mjs`: 12 testes Node da ponte, com rolagem do FAQ, gestos, transições, tela cheia e limpeza de listeners.
 - `.openai/hosting.json`: identidade e configuração de hospedagem. O site começa com acesso privado.
 
 ## Conteúdo e edição
@@ -37,6 +44,10 @@ O currículo e o contexto da vaga foram usados apenas neste projeto. Nenhum arqu
 
 ## Movimento
 
-As entradas de conteúdo usam opacidade, deslocamento e escala discreta. O seletor tem indicador deslizante e a moldura se expande com uma única instância do iframe. A escolha de cada formato retorna ao início pelos controles da demonstração. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. Preferência por movimento reduzido remove a expansão espacial e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
+Títulos e descrições aparecem palavra por palavra, com opacidade, deslocamento e desfoque. A mídia entra com escala discreta. O seletor tem indicador deslizante e a moldura se expande com uma única instância do iframe. A escolha de cada formato retorna ao início pelos controles da demonstração, antes e após o resize. O estado de celular usa viewport lógico 393 × 852, e o computador usa 1440 × 900, escalados proporcionalmente à moldura. Tela cheia reutiliza a mesma demonstração. `prefers-reduced-motion` mantém o texto visível, remove a revelação por palavras e a expansão espacial, e impede autoplay do vídeo. Loops de vídeo pausam fora da tela ou quando a aba fica oculta.
 
-Tipografia principal: fontes de sistema da Apple via `-apple-system` e `BlinkMacSystemFont`, com fallback de sistema em outras plataformas. Não há download de fontes para a página principal.
+Tipografia principal: SF Pro disponível localmente no sistema Apple, seguida de `-apple-system`, `BlinkMacSystemFont` e fallbacks de sistema. A página principal não baixa nem redistribui arquivos de fontes Apple. As fontes próprias da demonstração permanecem no snapshot.
+
+## Rolagem da demonstração
+
+A ponte funciona apenas quando o iframe e o portfólio têm a mesma origem. Wheel/touch continuam na demonstração enquanto ela ou algum painel interno ainda podem rolar. Nas extremidades globais, o gesto passa ao portfólio; o FAQ desktop conserva sua rolagem interna mesmo com o cursor sobre o controle flutuante. Campos, diálogos, pinch, gestos horizontais e transições internas ficam independentes. Durante o carregamento, a ponte permite rolar o portfólio. Em tela cheia não há transferência. Abrir a demonstração sozinha também desativa a ponte.

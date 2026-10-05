@@ -4,6 +4,7 @@
 import { nextScrollGate, scrollNavigation, storyPageStops, WheelGesture, type Direction, type ScrollGate } from './scroll-gates';
 import { sectionNavigationEvent, type SectionNavigationDetail } from './scroll-to-section';
 import { internalStoryTarget, mobileReleaseTarget, type MobileContentRange } from './mobile-scroll-logic';
+import { portfolioScrollHandoffEvent } from '../../portfolio-scroll-bridge';
 
 /** Mobile feed navigation: one vertical contact can reach only an adjacent stop. */
 export function createMobileScrollController(page: HTMLDivElement,
@@ -418,6 +419,7 @@ export function createMobileScrollController(page: HTMLDivElement,
     if (!story?.classList.contains('is-ready')) { stageRange = undefined; syncStage(); }
   };
   const suspend = () => { cancel(); wheel.reset(); dirty = true; };
+  const portfolioHandoff = () => { cancel(); wheel.reset(); };
   const resume = () => { suspend(); measure(); };
   const visibility = () => { if (document.hidden) suspend(); else resume(); };
   const resize = new ResizeObserver(invalidate); resize.observe(page); if (stage) resize.observe(stage);
@@ -436,6 +438,7 @@ export function createMobileScrollController(page: HTMLDivElement,
   window.addEventListener('click', onClick, true);
   window.addEventListener('resize', onResize);
   window.addEventListener('hashchange', cancel);
+  window.addEventListener(portfolioScrollHandoffEvent, portfolioHandoff);
   window.addEventListener('pagehide', suspend);
   window.addEventListener('pageshow', resume);
   document.addEventListener('visibilitychange', visibility);
@@ -450,6 +453,7 @@ export function createMobileScrollController(page: HTMLDivElement,
     window.removeEventListener('wheel', onWheel); window.removeEventListener('keydown', onKey);
     window.removeEventListener('click', onClick, true); window.removeEventListener('resize', onResize);
     window.removeEventListener('hashchange', cancel);
+    window.removeEventListener(portfolioScrollHandoffEvent, portfolioHandoff);
     window.removeEventListener('pagehide', suspend); window.removeEventListener('pageshow', resume);
     document.removeEventListener('visibilitychange', visibility);
     window.removeEventListener(sectionNavigationEvent, navigateSection);
