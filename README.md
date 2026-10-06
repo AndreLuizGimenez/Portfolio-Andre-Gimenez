@@ -28,6 +28,10 @@ O vídeo toca sozinho, sem som e em loop enquanto a seção está na tela, e pau
 
 O arquivo do vídeo tem 6,9 MB e não é pedido na abertura do site: ele e seu pôster só começam a carregar quando o visitante chega à segunda seção. O ícone do WhatsApp foi gerado pelo Codex e exportado em 192 × 192.
 
+## Blocos de texto
+
+Os parágrafos de descrição das três seções são compostos como blocos de bordas retas: as linhas saem quase da mesma largura, a última inclusive, e a pequena diferença é repartida entre os caracteres da linha, sem abrir os espaços entre as palavras. Quando preciso, uma palavra é dividida por sílaba. As divisões possíveis estão numa lista em `typeset.js`; ao trocar um texto, acrescente ali as palavras longas novas.
+
 ## Fundo
 
 As formas do fundo das duas primeiras seções são placas de vidro translúcido empilhadas: cada uma refrata, tinge e ilumina a imagem de tudo o que está atrás dela, com a distorção concentrada numa faixa larga antes da borda. As silhuetas, posições e cores de base são as mesmas das formas sólidas, que continuam no HTML como fallback. O desenho é feito uma única vez por tamanho de janela, fora da thread principal, já nos dois temas; depois disso o fundo é só uma imagem parada.
@@ -51,6 +55,7 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 - `dist/portfolio/wheel-gate.js`: controle de inércia, um passo por gesto.
 - `dist/portfolio/showcase.js`: aparelho, troca de formato, entrada e demonstração sob demanda.
 - `dist/portfolio/reel.js`: vídeo da terceira seção, carregado e tocado só quando a seção se aproxima.
+- `dist/portfolio/typeset.js`: compõe os parágrafos de descrição como blocos de bordas retas.
 - `dist/portfolio/glass.js`: refração geométrica das lentes.
 - `dist/portfolio/backdrop.js`: lê as formas e as cores do fundo e entrega o desenho a um worker.
 - `dist/portfolio/backdrop-worker.js`: desenha as placas de vidro, por software, nos dois temas.
@@ -64,7 +69,7 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 ## Verificação
 
 ```sh
-for f in site stack showcase reel wheel-gate glass backdrop backdrop-worker; do node --check dist/portfolio/$f.js; done
+for f in site stack showcase reel typeset wheel-gate glass backdrop backdrop-worker; do node --check dist/portfolio/$f.js; done
 node --test scripts/wheel-gate.test.mjs
 python3 scripts/check-assets.py
 ```

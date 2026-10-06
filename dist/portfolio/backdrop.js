@@ -4,7 +4,7 @@
 // one bitmap per theme for each backdrop; the SVG underneath stays as the fallback.
 (() => {
   if (!window.Worker || !window.createImageBitmap || !window.ImageBitmapRenderingContext || !window.ResizeObserver) return;
-  const source = new URL('backdrop-worker.js?v=5', document.currentScript.src);
+  const source = new URL('backdrop-worker.js?v=8', document.currentScript.src);
   const names = ['day', 'night'];
   const grounds = { '.site-backdrop': '--paper', '.project-backdrop': '--stage' };
 

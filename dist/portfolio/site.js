@@ -1,8 +1,9 @@
 'use strict';
 
-import { createStack } from './stack.js?v=5';
-import { initShowcase } from './showcase.js?v=5';
-import { initReel } from './reel.js?v=5';
+import { createStack } from './stack.js?v=8';
+import { initShowcase } from './showcase.js?v=8';
+import { initReel } from './reel.js?v=8';
+import { initTypeset } from './typeset.js?v=8';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -76,6 +77,7 @@ const stack = createStack(document.querySelector('.stack'), {
     if (to < stack.panels.indexOf(game)) reel.stage();
   },
 });
+initTypeset([...document.querySelectorAll('.hero-description, .project-lead, .project-description')]);
 const showcase = initShowcase(project, {
   reducedMotion,
   onView: (view, animate) => viewSwitch.select(view, animate),

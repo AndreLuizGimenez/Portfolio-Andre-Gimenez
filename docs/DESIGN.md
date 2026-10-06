@@ -48,11 +48,21 @@ O vídeo começa sozinho, sem som, e repete sem parar. O botão de pausa fica no
 
 Uma seção pulada por um salto direto (Home, End ou um link) não fica presa na pose de espera: quando é descoberta por cima aparece no lugar, e toda seção que volta a ficar abaixo da atual recomeça sua entrada na próxima subida.
 
+## Blocos de texto
+
+Os parágrafos de descrição (o da abertura, a chamada e a descrição do e-commerce, a descrição do jogo) formam blocos de bordas retas, como um texto justificado, mas sem abrir os espaços entre as palavras. As linhas são quebradas de modo que todas, inclusive a última, fiquem quase da mesma largura, e a pequena diferença que sobra é repartida entre todos os caracteres da linha: uma fração de pixel em cada um, de −0,02 a +0,04 em nas telas testadas. Quando as palavras inteiras não fecham o bloco, uma palavra é dividida por sílaba, com hífen.
+
+O número de linhas é o mesmo que o texto teria sem o ajuste, então a altura da seção não muda. O bloco pode ficar mais estreito que a coluna: o que importa é a borda reta. Quando encher a última linha exigiria dividir várias palavras seguidas, ela fica curta e começa na borda esquerda do bloco, também nos layouts centralizados. Um parágrafo de uma linha só fica como está.
+
+As divisões silábicas vêm de uma lista escrita à mão em `typeset.js`. Um texto novo precisa ter suas palavras longas acrescentadas ali, senão só quebra entre palavras. Num parágrafo com palavra dividida o leitor de tela recebe o texto original, inteiro. Sem JavaScript os parágrafos ficam como escritos.
+
 ## Leveza
 
 O aparelho exibe uma imagem do site em alta resolução. A demonstração real é carregada somente quando alguém clica na tela, com uma barra de progresso no topo, e é removida ao sair. Fora desse momento as duas seções não executam nada em segundo plano.
 
 O vídeo do jogo e seu pôster só são pedidos quando o visitante chega à seção anterior, e o vídeo só toca enquanto a sua seção está na tela.
+
+A composição dos blocos de texto roda uma vez no carregamento, em cerca de 7 a 9 ms, e de novo só quando a largura disponível muda, em 2 a 4 ms por quadro. Parada, não faz nada.
 
 As animações de entrada e a troca de seção usam apenas transformações e opacidade. Seções cobertas ficam ocultas e inertes. As camadas de profundidade do celular só existem durante o giro.
 
