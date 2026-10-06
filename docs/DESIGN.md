@@ -8,7 +8,15 @@ Cada seção é uma camada opaca do tamanho da viewport. Ao avançar, a próxima
 
 Um gesto vale uma seção. A inércia do trackpad continua emitindo rolagem por mais de um segundo depois que os dedos saem; como ela só decresce, o passo fica gasto até a rolagem pausar ou voltar a subir de forma clara. Uma roda girada sem parar também move uma seção por vez. No toque, a seção acompanha o dedo e, ao soltar, completa o movimento ou retorna, sem parar entre duas.
 
-As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo com dunas sólidas mais profundas atrás do aparelho. Não há degradês.
+As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo com dunas mais profundas atrás do aparelho.
+
+## Fundo em Liquid Glass
+
+As ondas da abertura e as dunas do projeto são placas de vidro empilhadas, não blocos de cor. Silhuetas, posições e proporções são as das formas originais, e cada placa conserva em média o tom que tinha quando era sólida.
+
+Cada placa é clara no miolo e tem uma borda convexa larga, de cerca de 7% do menor lado da janela. Nessa faixa ela desloca a imagem de tudo o que está atrás, cada vez mais quanto mais perto da borda, de modo que as bordas das placas de trás aparecem dobradas e a cor de fora é puxada para dentro. Completam o material um fio de luz na borda voltada para a luz, a face iluminada que dá a espessura, uma linha escura onde essa face termina e a sombra que a placa projeta sobre o que está atrás. A luz vem do mesmo lado que nas lentes dos seletores.
+
+O brilho e a sombra ficam nas bordas; o interior das placas continua calmo. Onde há texto por cima, a borda perde quase todo o brilho e a sombra e sobra apenas o degrau de cor, para nenhuma linha clara atravessar as letras. Em telas estreitas, onde as curvas ficam fechadas, a faixa encolhe até caber na curva, senão o vidro dobraria a imagem sobre si mesma. Não há formas, padrões nem texturas novas: o vidro só refrata o papel e as outras placas.
 
 ## Primeira seção
 
@@ -37,5 +45,7 @@ Ao escolher Computador, o corpo do celular muda de largura, altura, raio e moldu
 O aparelho exibe uma imagem do site em alta resolução. A demonstração real é carregada somente quando alguém clica na tela, com uma barra de progresso no topo, e é removida ao sair. Fora desse momento as duas seções não executam nada em segundo plano.
 
 As animações de entrada e a troca de seção usam apenas transformações e opacidade. Seções cobertas ficam ocultas e inertes. As camadas de profundidade do celular só existem durante o giro.
+
+O fundo em vidro é calculado uma vez por tamanho de janela, num worker, e vira uma imagem parada; o worker é encerrado em seguida. Enquanto a janela é arrastada a imagem antiga apenas estica, e o novo cálculo só acontece quando o tamanho para de mudar. Os dois temas saem do mesmo cálculo, então trocar de tema é apenas um esmaecimento entre duas imagens. A resolução tem teto fixo, igual numa tela 4K e num celular. Sem JavaScript ou sem worker ficam as formas sólidas.
 
 O código da versão anterior foi preservado em [`pasta temporaria/`](../pasta%20temporaria/), incluindo a exportação antiga e `sources-nival`.

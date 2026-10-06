@@ -20,6 +20,10 @@ Mostra o e-commerce ao lado do aparelho que o exibe. Ao entrar em cena, o celula
 
 O aparelho mostra uma imagem da primeira tela do site. A demonstração real, que é uma aplicação inteira, só é carregada quando alguém clica na tela e é removida ao sair (Esc, clique fora, troca de formato ou mudança de seção). Assim as duas seções permanecem leves e nenhuma animação do portfólio disputa o processador com a demonstração.
 
+## Fundo
+
+As formas do fundo das duas seções são placas de vidro translúcido empilhadas: cada uma refrata, tinge e ilumina a imagem de tudo o que está atrás dela, com a distorção concentrada numa faixa larga antes da borda. As silhuetas, posições e cores de base são as mesmas das formas sólidas, que continuam no HTML como fallback. O desenho é feito uma única vez por tamanho de janela, fora da thread principal, já nos dois temas; depois disso o fundo é só uma imagem parada.
+
 ## Prévia local
 
 Na pasta deste arquivo:
@@ -39,6 +43,8 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 - `dist/portfolio/wheel-gate.js`: controle de inércia, um passo por gesto.
 - `dist/portfolio/showcase.js`: aparelho, troca de formato, entrada e demonstração sob demanda.
 - `dist/portfolio/glass.js`: refração geométrica das lentes.
+- `dist/portfolio/backdrop.js`: lê as formas e as cores do fundo e entrega o desenho a um worker.
+- `dist/portfolio/backdrop-worker.js`: desenha as placas de vidro, por software, nos dois temas.
 - `dist/portfolio/nival-mobile.webp` e `nival-desktop.webp`: imagens da primeira tela, capturadas da própria demonstração em 414 × 852 e 1440 × 900.
 - `dist/demos/nival/`: demonstração compilada do e-commerce.
 - `pasta temporaria/dist-restante-2026-10-05/`: cópia completa da versão anterior.
@@ -47,7 +53,7 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 ## Verificação
 
 ```sh
-for f in site stack showcase wheel-gate glass; do node --check dist/portfolio/$f.js; done
+for f in site stack showcase wheel-gate glass backdrop backdrop-worker; do node --check dist/portfolio/$f.js; done
 node --test scripts/wheel-gate.test.mjs
 python3 scripts/check-assets.py
 ```

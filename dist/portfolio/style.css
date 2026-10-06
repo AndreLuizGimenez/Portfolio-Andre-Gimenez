@@ -15,9 +15,9 @@
   --blue: #376da4;
   --blue-mid: #68a4bc;
   --ice: #c3dcdd;
-  --wave-back: #e8eff0;
-  --wave-middle: #e2ebed;
-  --wave-front: #edf2f1;
+  --wave-back: #e1eaed;
+  --wave-middle: #d6e3e8;
+  --wave-front: #e6eef0;
   --track: #415b69;
   --track-edge: #314a57;
   --stage: #e9eff0;
@@ -71,6 +71,14 @@ h1, h2, p, ul { margin: 0; }
 .wave-back { fill: var(--wave-back); }
 .wave-middle { fill: var(--wave-middle); }
 .wave-front { fill: var(--wave-front); }
+/* Glass plates drawn by backdrop.js cover the flat shapes; the night render fades in over the day one.
+   It reads both palettes from the :root and :root[data-theme="night"] rules, by those exact selectors. */
+.backdrop-glass { position: absolute; opacity: 0; transition: opacity .6s var(--ease); }
+.backdrop-glass.is-drawn { opacity: 1; }
+.backdrop-glass canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.backdrop-glass .glass-night { opacity: 0; transition: opacity .5s var(--ease); }
+:root[data-theme="night"] .glass-night { opacity: 1; }
+.has-glass > svg { visibility: hidden; }
 
 .hero-section { width: 100%; height: 100vh; height: 100svh; }
 .hero-shell {
