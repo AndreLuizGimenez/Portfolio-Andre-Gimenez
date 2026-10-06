@@ -1,7 +1,7 @@
 // Glass backdrops. The flat shapes of a backdrop become stacked sheets of clear liquid glass that swell and
 // slide over each other, and a clear pane lies behind each block of text. One WebGL2 canvas per backdrop
 // draws both, a frame at a time; the SVG underneath stays as the fallback.
-import { fragment, vertex } from './backdrop-glsl.js?v=10';
+import { fragment, vertex } from './backdrop-glsl.js?v=11';
 
 const BUDGET = 3.6e6;          // canvas pixels per backdrop
 const COLUMNS = 1024;          // samples of each edge across its span
@@ -56,7 +56,7 @@ function bezier(x1, y1, x2, y2) {
 const EASE = bezier(.22, 1, .36, 1), SETTLE = bezier(.16, .9, .28, 1);
 
 // One edge as heights and slopes over its own span of x, in the units of the drawing.
-function tabulate(values) {
+function tabulate(values, close) {
   const xs = [], ys = [];
   for (let s = 2; s + 5 < values.length; s += 6) {
     for (let i = s > 2 ? 1 : 0; i <= STEPS; i += 1) {
@@ -82,7 +82,8 @@ function tabulate(values) {
     const u = clamp((x - from) / step, 0, COLUMNS - 1.001), i = u | 0;
     return lerp(heights[i], heights[i + 1], u - i);
   };
-  return { xs, ys, from, to, table, height };
+  // The plate lies on the side of the edge where the outline goes on to close: below it (1) or above it (-1).
+  return { xs, ys, from, to, table, height, side: close[1] < height(close[0]) ? -1 : 1 };
 }
 
 // A plate keeps its original tone on average: its veil is solved against the mean of what it covers.
@@ -91,7 +92,7 @@ function veils(edges, box, { page, fills }, alpha) {
   for (let y = 4; y < box[1]; y += 8) {
     for (let x = 4; x < box[0]; x += 8) {
       let mask = 0;
-      edges.forEach((edge, plate) => { if (x >= edge.from && x <= edge.to && y > edge.height(x)) mask |= 1 << plate; });
+      edges.forEach((edge, plate) => { if (x >= edge.from && x <= edge.to && (y - edge.height(x)) * edge.side > 0) mask |= 1 << plate; });
       census[mask] += 1;
     }
   }
@@ -114,7 +115,7 @@ function veils(edges, box, { page, fills }, alpha) {
 // Normals to an edge cross at its centres of curvature: inside the plate under a crest, outside it over a
 // trough. A rim reaching the first, or a view bent past the second, would fold the picture, so each plate's
 // optics shrink to fit. On a wide screen none has to.
-function optics({ xs, ys }, sx, sy, width, height, curl) {
+function optics({ xs, ys, side }, sx, sy, width, height, curl) {
   const widest = clamp(Math.min(width, height) * .071, 36, 80);
   let crest = Infinity, trough = Infinity;
   for (let i = 1; i < xs.length - 1; i += 1) {
@@ -126,7 +127,7 @@ function optics({ xs, ys }, sx, sy, width, height, curl) {
     const radius = Math.hypot(ax, ay) * Math.hypot(bx, by) * Math.hypot(ax + bx, ay + by) / (2 * Math.abs(cross));
     // A swell passing over a bend can tighten it by as much as its own curvature.
     const tight = radius / (1 + radius * curl);
-    if (cross > 0) crest = Math.min(crest, tight); else trough = Math.min(trough, tight);
+    if (cross * side > 0) crest = Math.min(crest, tight); else trough = Math.min(trough, tight);
   }
   const band = Math.min(widest, crest * .85, trough * 1.4), unit = band / 64, reach = band * .56;
   return {
@@ -191,8 +192,11 @@ export function initBackdrops({ reducedMotion } = {}) {
     // Without every colour the flat shapes are the honest picture.
     if (palettes.some(({ page, fills }) => !page || fills.includes(null))) return null;
     const box = [svg.viewBox.baseVal.width, svg.viewBox.baseVal.height];
-    // Each shape is the area under its curve: the closing lines lie outside the view.
-    const edges = paths.map(path => tabulate(path.getAttribute('d').split('L')[0].match(/-?[\d.]+/g).map(Number)));
+    // Each shape is the area on one side of its curve, under it or over it: the closing lines lie outside the view.
+    const edges = paths.map(path => {
+      const [curve, close] = path.getAttribute('d').split('L').map(part => part.match(/-?[\d.]+/g).map(Number));
+      return tabulate(curve, close);
+    });
     const plates = edges.length;
     const alpha = edges.map((edge, plate) => ALPHA[Math.min(ALPHA.length - 1, plates - 1 - plate)]);
     const themes = palettes.map(palette => {
@@ -211,7 +215,7 @@ export function initBackdrops({ reducedMotion } = {}) {
     const theme = { at: night(), from: night(), to: night(), start: 0 };
     let gl, program, uniform, compiling, parallel, plain, lost = false;
     let width = 0, height = 0, ratio = 1, thrift = 1, ceiling = 0, clock = 0, last = 0, drawn = 0, frames = 0, dirty = true, shown = false;
-    let heights = [];
+    let heights = [], check = 75, slow = 0;
     const lean = [0, 0];
 
     function build() {
@@ -248,7 +252,7 @@ export function initBackdrops({ reducedMotion } = {}) {
       const cache = new Map();
       uniform = name => cache.get(name) ?? cache.set(name, gl.getUniformLocation(program, name)).get(name);
       gl.uniform1i(uniform('uEdges'), 0);
-      gl.uniform2fv(uniform('uSpan'), edges.flatMap(edge => [edge.from, (COLUMNS - 1) / (edge.to - edge.from)]));
+      gl.uniform3fv(uniform('uSpan'), edges.flatMap(edge => [edge.from, (COLUMNS - 1) / (edge.to - edge.from), edge.side]));
       gl.uniform2fv(uniform('uLight'), LIGHT);
       return true;
     }
@@ -314,7 +318,9 @@ export function initBackdrops({ reducedMotion } = {}) {
       heights = swells.map(pair => pair.reduce((sum, [a]) => sum + a, 0));
       // Above the highest crest, its shadow and its swell, and above the pane, the page is bare: nothing is drawn there.
       ceiling = height;
-      edges.forEach(({ xs, ys }, plate) => {
+      edges.forEach(({ xs, ys, side }, plate) => {
+        // A plate that hangs from the top leaves no bare page above it.
+        if (side < 0) { ceiling = 0; return; }
         const [band, , , reach] = each[plate].lens;
         let crest = Infinity;
         for (let i = 0; i < xs.length; i += 1) if (xs[i] * sx > -band - width * .05 && xs[i] * sx < width * 1.05 + band) crest = Math.min(crest, ys[i] * sy);
@@ -418,14 +424,16 @@ export function initBackdrops({ reducedMotion } = {}) {
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       if (!shown) { shown = true; canvas.classList.add('is-drawn'); }
       frames += 1;
-      // Once things have settled, one frame is timed to its end: a slow GPU gets a coarser canvas.
-      if (frames === 75 && !moving) {
+      // Once things have settled, one frame is timed to its end, and another a second later if that one was
+      // slow: a GPU that is slow both times, not just busy for a moment, gets a coarser canvas.
+      if (frames === check && !moving) {
         const started = performance.now();
         gl.drawArrays(gl.TRIANGLES, 0, 3);
         gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
         const cost = performance.now() - started;
-        if (cost > COST) { thrift = Math.sqrt(COST / cost); measure(); return draw(now); }
-      } else if (frames === 75) frames -= 1;
+        if (cost > COST && !slow) { slow = cost; check += 30; }
+        else if (cost > COST) { thrift = Math.sqrt(COST / Math.min(slow, cost)); measure(); return draw(now); }
+      } else if (frames === check) frames -= 1;
       return seen && (drifting || moving);
     }
 

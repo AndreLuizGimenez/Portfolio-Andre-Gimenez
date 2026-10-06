@@ -38,7 +38,7 @@ As formas do fundo das duas primeiras seções são lâminas de vidro líquido e
 
 Tudo é desenhado pela placa de vídeo (WebGL2), um canvas por seção, só enquanto a seção está na tela. As formas sólidas continuam no HTML como fallback; sem WebGL2 o painel vira uma folha translúcida simples. Com a preferência de movimento reduzido o fundo é desenhado uma vez e fica parado.
 
-O painel acompanha o texto: `backdrop.js` mede o bloco marcado com `data-pane` e soma a folga de `--pane-pad`; os cantos vêm de `--pane-radius`. Na segunda seção o fundo é uma única lâmina (`dune-side`), à direita, que passa por trás do painel de texto; o lado do aparelho fica liso.
+O painel acompanha o texto: `backdrop.js` mede o bloco marcado com `data-pane` e soma a folga de `--pane-pad`; os cantos vêm de `--pane-radius`. Na segunda seção o fundo são duas lâminas iguais em cantos opostos (`dune-side`): uma sobe do canto inferior direito por trás do painel de texto, a outra desce do canto superior esquerdo por trás do aparelho.
 
 ## Prévia local
 

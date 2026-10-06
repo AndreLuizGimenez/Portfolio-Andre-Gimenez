@@ -1,10 +1,10 @@
 'use strict';
 
-import { createStack } from './stack.js?v=10';
-import { initShowcase } from './showcase.js?v=10';
-import { initReel } from './reel.js?v=10';
-import { initTypeset } from './typeset.js?v=10';
-import { initBackdrops } from './backdrop.js?v=10';
+import { createStack } from './stack.js?v=11';
+import { initShowcase } from './showcase.js?v=11';
+import { initReel } from './reel.js?v=11';
+import { initTypeset } from './typeset.js?v=11';
+import { initBackdrops } from './backdrop.js?v=11';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 

@@ -8,11 +8,11 @@ Cada seção é uma camada opaca do tamanho da viewport. Ao avançar, a próxima
 
 Um gesto vale uma seção. A inércia do trackpad continua emitindo rolagem por mais de um segundo depois que os dedos saem; como ela só decresce, o passo fica gasto até a rolagem pausar ou voltar a subir de forma clara. Uma roda girada sem parar também move uma seção por vez. No toque, a seção acompanha o dedo e, ao soltar, completa o movimento ou retorna, sem parar entre duas.
 
-As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo liso atrás do aparelho, com uma única lâmina de vidro à direita, atrás do texto.
+As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo com duas lâminas de vidro em cantos opostos.
 
 ## Fundo em Liquid Glass
 
-As ondas da abertura são lâminas de vidro líquido empilhadas, com as silhuetas, posições e tons médios das formas originais. Na segunda seção há uma só lâmina, à direita, que sobe por trás do painel de texto; as três dunas que ficavam atrás do aparelho foram retiradas, porque pesavam mais do que ajudavam.
+As ondas da abertura são lâminas de vidro líquido empilhadas, com as silhuetas, posições e tons médios das formas originais. Na segunda seção há duas lâminas claras, uma espelho da outra: a do canto inferior direito sobe por trás do painel de texto e a do canto superior esquerdo desce por trás do aparelho. As três dunas empilhadas que ficavam atrás do aparelho foram retiradas, porque pesavam mais do que ajudavam.
 
 Não há linha dura entre as camadas. A borda de cada lâmina é um ombro arredondado e largo: a vista através dele começa sem desvio no contorno, alcança mais longe um terço adiante e volta ao normal, de modo que o que passa por trás é espremido contra o contorno e depois esticado, sem rasgar. A luz aparece como um lóbulo suave com um fio fino dentro, no ponto em que a inclinação do ombro devolve a luz, e por isso desliza pela borda quando ela se move. O tom da lâmina escurece de leve em direção ao contorno, como a borda de um vidro grosso.
 
@@ -76,7 +76,7 @@ As animações de entrada e a troca de seção usam apenas transformações e op
 
 O fundo em vidro é desenhado pela placa de vídeo, um canvas por seção. Só a seção na tela desenha, a cerca de 30 quadros por segundo (o movimento é lento e não pede mais), e a 60 enquanto um tema troca ou um painel entra. Fora da tela, com a aba oculta ou com a demonstração do e-commerce ativa, não desenha nada. A parte da página acima da onda mais alta e do painel nem é calculada.
 
-A resolução do canvas tem teto fixo. Depois de alguns segundos um quadro é cronometrado até o fim; se a placa de vídeo levar mais de 6 ms, o canvas fica mais grosso, nunca abaixo de um pixel por pixel de CSS. Trocar de tema é uma mistura dos parâmetros dentro do mesmo desenho, sem imagens guardadas.
+A resolução do canvas tem teto fixo. Depois de alguns segundos um quadro é cronometrado até o fim; se a placa de vídeo levar mais de 6 ms, e de novo um segundo depois, o canvas fica mais grosso, nunca abaixo de um pixel por pixel de CSS. Trocar de tema é uma mistura dos parâmetros dentro do mesmo desenho, sem imagens guardadas.
 
 Sem WebGL2, se o shader não compilar ou se o contexto for perdido, voltam as formas sólidas, com uma folha translúcida simples no lugar do painel. Sem JavaScript ficam só as formas sólidas.
 

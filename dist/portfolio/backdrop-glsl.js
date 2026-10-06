@@ -52,7 +52,7 @@ uniform vec2 uView;               // size of the backdrop
 uniform float uRatio;             // canvas pixels per CSS pixel
 uniform vec2 uScale;              // CSS pixels per unit of the drawing
 uniform sampler2D uEdges;         // height and slope of each edge, a row per plate
-uniform vec2 uSpan[${plates}];    // where a row starts, and its columns per unit
+uniform vec3 uSpan[${plates}];    // where a row starts, its columns per unit, and the side of the edge its plate lies on
 uniform vec4 uLens[${plates}];    // rim width, how hard it bends, unit of detail, shadow reach
 uniform vec4 uCast[${plates}];    // shadow spread, drop and shelter
 uniform vec4 uVeil[${plates}];    // tint of a plate and how much of it shows
@@ -100,7 +100,8 @@ vec3 edge(int plate, float x) {
   return vec3(v, rise * drift.w);
 }
 
-// Signed distance to an edge (positive inside the plate, which lies below it), the inward normal, the swell.
+// Signed distance to an edge (positive inside the plate, which lies below it or, for a side of -1, above it),
+// the inward normal, the swell.
 vec4 field(int plate, vec2 p) {
   vec3 e = edge(plate, p.x);
   float slant = inversesqrt(1. + e.y * e.y);
@@ -109,7 +110,8 @@ vec4 field(int plate, vec2 p) {
   // Far from the edge only the side matters. Near it, the closest point lies along the normal rather than
   // straight above: two steps toward it, none longer than the rim is wide.
   float near = uLens[plate].x * 1.6;
-  if (abs(d) > near) return vec4(d, n, e.z);
+  float side = uSpan[plate].z;
+  if (abs(d) > near) return vec4(d * side, n * side, e.z * side);
   float x = p.x;
   for (int step = 0; step < 2; step += 1) {
     x += clamp(((p.x - x) + (p.y - e.x) * e.y) * slant * slant, -near, near);
@@ -117,7 +119,7 @@ vec4 field(int plate, vec2 p) {
     slant = inversesqrt(1. + e.y * e.y);
   }
   n = vec2(-e.y, 1.) * slant;
-  return vec4(dot(p - vec2(x, e.x), n), n, e.z);
+  return vec4(dot(p - vec2(x, e.x), n) * side, n * side, e.z * side);
 }
 
 // A plate's shadow falls away from the light, on whatever lies behind it.
