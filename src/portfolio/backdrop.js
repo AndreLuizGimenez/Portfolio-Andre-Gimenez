@@ -1,21 +1,21 @@
 // Glass backdrops. The flat shapes of a backdrop become stacked sheets of clear liquid glass that swell and
 // slide over each other, and a clear pane lies behind each block of text. One WebGL2 canvas per backdrop
 // draws both, a frame at a time; the SVG underneath stays as the fallback.
-import { fragment, vertex } from './backdrop-glsl.js?v=11';
+import { fragment, vertex } from './backdrop-glsl.js';
 
 const BUDGET = 3.6e6;          // canvas pixels per backdrop
 const COLUMNS = 1024;          // samples of each edge across its span
 const STEPS = 96;              // straight pieces per curve segment
 const LIGHT = [-.552, -.834];  // toward the light, as on the selector lens
 const ALPHA = [.4, .46, .5];     // veil of each plate, front to back; the rest as the last
-const PACE = 1000 / 30;        // the drift is slow: half the frames show it just as well
-const COST = 6;                // milliseconds of GPU a frame may take before the canvas gets coarser
+const PACE = 1000 / 30;        // the drift's cadence until the GPU has shown it can draw every frame
+const COST = .36;              // share of a frame the GPU may spend on a backdrop, 3 to 6 ms, before it draws less
 const BEND = 3.4;              // how hard a rim bends its view: past 3 a stretch of it shows one line of the picture, drawn out
 const PANE = .9;               // how far inside itself the rim of a pane looks, in rim widths: near 1 its whole band shows one strip
 const BREATH = .24;            // share of its width a rim loses in a trough of the swell
 const ROLL = [1.5, .0065, .007]; // the swell across a plate: lean of its crests, sway of the view (share of the shorter side), light
 const REACH = [3, 6, 9, 12];   // pixels a plate yields to the pointer, back to front
-const GROUNDS = { '.site-backdrop': '--paper', '.project-backdrop': '--stage' };
+const GROUNDS = { '.site-backdrop': '--paper', '.project-backdrop': '--stage', '.game-backdrop': '--paper' };
 
 // Optical strengths differ between a pale and a deep page; geometry does not.
 const TONES = {
@@ -139,7 +139,8 @@ function optics({ xs, ys, side }, sx, sy, width, height, curl) {
 export function initBackdrops({ reducedMotion } = {}) {
   const panes = new Map();
   const inert = { stage() {}, show() {}, arrive() {} };
-  const api = { pane: section => panes.get(section) || inert };
+  // `prepare()` starts every backdrop now and settles once each has drawn once, or given way to its flat shapes.
+  const api = { pane: section => panes.get(section) || inert, prepare: () => Promise.resolve() };
   const probe = document.createElement('canvas');
   if (!window.ResizeObserver || !probe.getContext) return api;
 
@@ -173,10 +174,13 @@ export function initBackdrops({ reducedMotion } = {}) {
     pointer[1] = clamp(event.clientY / window.innerHeight * 2 - 1, -1, 1);
   }, { passive: true });
 
-  let frame = 0;
+  let frame = 0, previous = 0, interval = 1000 / 60;
   const wake = () => { frame ||= requestAnimationFrame(tick); };
   function tick(now) {
     frame = 0;
+    // The display's own frame time, read from the frames as they come.
+    if (now - previous < 40) interval += (now - previous - interval) * .05;
+    previous = now;
     let again = false;
     for (const backdrop of backdrops) again = backdrop.draw(now) || again;
     if (again) wake();
@@ -213,9 +217,11 @@ export function initBackdrops({ reducedMotion } = {}) {
     const host = section.querySelector('[data-pane]');
     const pane = { on: host ? 1 : 0, rect: null, from: null, start: 0, delay: 0, duration: 0, shift: [0, 0] };
     const theme = { at: night(), from: night(), to: night(), start: 0 };
+    let settle;
+    const first = new Promise(resolve => { settle = resolve; });   // the first frame, or the flat shapes for good
     let gl, program, uniform, compiling, parallel, plain, lost = false;
     let width = 0, height = 0, ratio = 1, thrift = 1, ceiling = 0, clock = 0, last = 0, drawn = 0, frames = 0, dirty = true, shown = false;
-    let heights = [], check = 75, slow = 0;
+    let heights = [], check = 20, slow = 0, pace = PACE;
     const lean = [0, 0];
 
     function build() {
@@ -261,22 +267,23 @@ export function initBackdrops({ reducedMotion } = {}) {
     function fail() {
       uniform = null;
       lost = true;
+      settle();
       canvas.remove();
       element.classList.remove('has-glass');
       if (!host) return;
-      // An entrance may already be under way: the sheet is simply there.
-      pane.on = 1;
-      pane.from = null;
+      // An entrance already under way ends with the sheet simply there; one still to come fades it in.
+      if (pane.from !== null) { pane.on = 1; pane.from = null; }
       plain = document.createElement('span');
       plain.className = 'pane-plain';
       element.append(plain);
       lay();
     }
-    function lay() {
+    // The sheet fades in after the same delay as the pane would have.
+    function lay(delay = 0) {
       if (!plain) return;
       const rect = pane.rect;
       plain.hidden = !rect;
-      if (rect) Object.assign(plain.style, { left: `${rect[0]}px`, top: `${rect[1]}px`, width: `${rect[2] - rect[0]}px`, height: `${rect[3] - rect[1]}px`, borderRadius: `${rect[4]}px`, opacity: pane.on });
+      if (rect) Object.assign(plain.style, { left: `${rect[0]}px`, top: `${rect[1]}px`, width: `${rect[2] - rect[0]}px`, height: `${rect[3] - rect[1]}px`, borderRadius: `${rect[4]}px`, opacity: pane.on, transitionDelay: `${delay}ms` });
     }
 
     function measure() {
@@ -390,8 +397,11 @@ export function initBackdrops({ reducedMotion } = {}) {
         moving = true;
         dirty = true;
       }
-      const drifting = !still() && !section.classList.contains('is-demo-active');
-      if (!dirty && (!drifting || now - drawn < PACE - 4)) return drifting;
+      // The drift's speed is set by the clock alone, however often it is drawn: every frame once the GPU has
+      // shown it can. It holds still while the live demo runs, and on a section being left, which a move
+      // covers or carries away in under a second.
+      const drifting = !still() && !section.classList.contains('is-demo-active') && !section.classList.contains('is-departing');
+      if (!dirty && (!drifting || now - drawn < pace - 4)) return drifting;
       const passed = drifting && last ? Math.min(100, now - last) / 1000 : 0;
       clock += passed;
       last = now;
@@ -422,17 +432,20 @@ export function initBackdrops({ reducedMotion } = {}) {
       gl.enable(gl.SCISSOR_TEST);
       gl.scissor(0, 0, canvas.width, Math.ceil((height - top) * canvas.height / height));
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      if (!shown) { shown = true; canvas.classList.add('is-drawn'); }
+      if (!shown) { shown = true; canvas.classList.add('is-drawn'); settle(); }
       frames += 1;
-      // Once things have settled, one frame is timed to its end, and another a second later if that one was
-      // slow: a GPU that is slow both times, not just busy for a moment, gets a coarser canvas.
+      // Early on, while nothing else moves, one frame is timed to its end. Within budget, the drift is drawn
+      // every frame from then on; otherwise it is timed again a second later, in case the GPU was only busy
+      // for a moment. Slow both times, the canvas gets coarser and is timed once more. Slow even then, the
+      // drift stays at 30 frames a second.
       if (frames === check && !moving) {
         const started = performance.now();
         gl.drawArrays(gl.TRIANGLES, 0, 3);
         gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(4));
-        const cost = performance.now() - started;
-        if (cost > COST && !slow) { slow = cost; check += 30; }
-        else if (cost > COST) { thrift = Math.sqrt(COST / Math.min(slow, cost)); measure(); return draw(now); }
+        const cost = performance.now() - started, budget = clamp(interval * COST, 3, 6);
+        if (cost <= budget) { slow = 0; pace = 0; }
+        else if (!slow) { slow = cost; check += 30; }
+        else if (thrift === 1) { thrift = Math.sqrt(budget / Math.min(slow, cost)); check += 30; measure(); return draw(now); }
       } else if (frames === check) frames -= 1;
       return seen && (drifting || moving);
     }
@@ -440,6 +453,7 @@ export function initBackdrops({ reducedMotion } = {}) {
     // A lost context shows nothing: the flat shapes return until it is restored and has drawn again.
     canvas.addEventListener('webglcontextlost', event => {
       event.preventDefault();
+      settle();
       uniform = null; compiling = false; gl = null; shown = false;
       canvas.classList.remove('is-drawn');
       element.classList.remove('has-glass');
@@ -454,7 +468,7 @@ export function initBackdrops({ reducedMotion } = {}) {
         stage() { if (!still()) { pane.on = 0; pane.from = null; dirty = true; lay(); wake(); } },
         show() { pane.on = 1; pane.from = null; dirty = true; lay(); wake(); },
         arrive({ delay = 0, duration = 720, shift = [0, 0] } = {}) {
-          if (plain) { this.show(); return; }
+          if (plain) { pane.on = 1; pane.from = null; lay(delay); return; }
           Object.assign(pane, { from: pane.on, start: performance.now(), delay, duration, shift });
           wake();
         },
@@ -465,6 +479,7 @@ export function initBackdrops({ reducedMotion } = {}) {
     measure();
     return {
       draw,
+      first,
       start() { if (!gl && !lost) { if (build()) wake(); else fail(); } },
       retheme() { Object.assign(theme, { from: theme.at, to: night(), start: performance.now() }); wake(); },
       redo() { measure(); dirty = true; wake(); },
@@ -473,10 +488,14 @@ export function initBackdrops({ reducedMotion } = {}) {
   }).filter(Boolean);
   if (!backdrops.length) return api;
 
-  // The backdrop on screen starts now; the others when the page has a moment to spare.
+  // The backdrop on screen starts now; the others when the page has a moment to spare, or when it prepares.
   backdrops.forEach(backdrop => { if (backdrop.visible()) backdrop.start(); });
   const later = window.requestIdleCallback || (run => setTimeout(run, 400));
   later(() => backdrops.forEach(backdrop => backdrop.start()));
+  api.prepare = () => {
+    backdrops.forEach(backdrop => backdrop.start());
+    return Promise.all(backdrops.map(backdrop => backdrop.first));
+  };
 
   new MutationObserver(() => backdrops.forEach(backdrop => backdrop.retheme())).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   document.addEventListener('visibilitychange', wake);

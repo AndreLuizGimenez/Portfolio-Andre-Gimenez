@@ -39,6 +39,9 @@ class Assets(HTMLParser):
                 self.anchors.append(value[1:])
             else:
                 check(value, self.source)
+        for candidate in (data.get('srcset') or '').split(','):
+            if candidate.strip():
+                check(candidate.split()[0], self.source)
 
 for source in root.rglob('*.html'):
     parser = Assets(source)

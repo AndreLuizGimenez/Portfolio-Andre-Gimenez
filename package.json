@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-andre-gimenez",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "test": "node --test scripts/wheel-gate.test.mjs && node scripts/build.mjs --check && python3 scripts/check-assets.py",
+    "preview": "python3 -m http.server 4173 --bind 127.0.0.1 --directory dist"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

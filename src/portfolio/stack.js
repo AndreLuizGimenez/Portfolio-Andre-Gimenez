@@ -1,13 +1,15 @@
-import { createWheelGate } from './wheel-gate.js?v=11';
+import { createWheelGate } from './wheel-gate.js';
 
 const DURATION = 820;
 const EASING = 'cubic-bezier(.4, 0, .1, 1)';
 const RELEASE = 'cubic-bezier(.2, .8, .2, 1)';
 const SHADE = .24;
+const AHEAD = 1200;   // ms after a move before the next section is drawn ahead: the entrance there plays first
 
 // Full-viewport sections stacked like cards: going forward, the next one rises
 // over the current; going back, the current one slides down off the previous.
-export function createStack(root, { reducedMotion, isCaptured = () => false, onStart, onEnd } = {}) {
+// While `isHeld()`, nothing moves, and a gesture made meanwhile is spent.
+export function createStack(root, { reducedMotion, isCaptured = () => false, isHeld = () => false, onStart, onEnd } = {}) {
   const panels = [...root.querySelectorAll('.panel')];
   const shades = panels.map(panel => {
     const shade = document.createElement('span');
@@ -17,20 +19,41 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     return shade;
   });
   const gate = createWheelGate();
+  // The gate watches the wheel frame by frame for as long as a gesture may still be running.
+  let watching = 0;
+  const watch = () => {
+    watching ||= requestAnimationFrame(() => {
+      watching = 0;
+      if (gate.beat(performance.now())) watch();
+    });
+  };
   const indexOfHash = hash => panels.findIndex(panel => panel.id && `#${panel.id}` === hash);
   let index = Math.max(0, indexOfHash(window.location.hash));
   let busy = false;
+  let moving = 0;   // direction of the move under way
   let touch;
+  let ahead = 0;
 
-  function settle() {
+  // The section below the current one waits just out of view, already drawn, so a move forward starts with
+  // nothing left to paint. Drawing it is work of its own: at first it is done at once, under the loading card;
+  // after a move, once the entrance there has had time to play and the page is idle.
+  function settle(first = false) {
     panels.forEach((panel, position) => {
       panel.classList.toggle('is-past', position < index);
       panel.classList.toggle('is-current', position === index);
-      panel.classList.remove('is-moving');
+      if (position !== index + 1) panel.classList.remove('is-next');
+      panel.classList.remove('is-moving', 'is-departing');
       panel.inert = position !== index;
       panel.style.transform = '';
       shades[position].style.opacity = '';
     });
+    clearTimeout(ahead);
+    const next = panels[index + 1];
+    // Without `inert`, a section drawn out of view could still be reached with the keyboard: it stays hidden.
+    if (!next || !('inert' in HTMLElement.prototype)) return;
+    const draw = () => { if (!busy && panels[index + 1] === next) next.classList.add('is-next'); };
+    if (first) draw();
+    else ahead = setTimeout(() => (window.requestIdleCallback || (run => run()))(draw, { timeout: 1000 }), AHEAD);
   }
 
   // `cover` runs from 0 (upper panel below the viewport) to 1 (it hides the lower one).
@@ -63,7 +86,10 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     const direction = Math.sign(target - from);
     const pair = pairOf(from, target);
     busy = true;
+    moving = direction;
+    clearTimeout(ahead);
     lift(pair);
+    panels[from].classList.add('is-departing');
     onStart?.({ from, to: target, direction });
     let animations = [];
     if (!reducedMotion.matches) {
@@ -77,6 +103,7 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     settle();
     animations.forEach(animation => animation.cancel());
     busy = false;
+    moving = 0;
     if (panels[index].id) window.history.replaceState(window.history.state, '', `#${panels[index].id}`);
     onEnd?.({ from, to: target, direction });
     return true;
@@ -87,7 +114,14 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
     event.preventDefault();
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
-    const direction = gate.push(delta, event.timeStamp, { ready: !busy && !touch?.pair, now: performance.now() });
+    // Held, the stack takes a gesture as part of a move its own way, so its inertia is spent by the time it lets go.
+    const held = isHeld();
+    const direction = gate.push(delta, event.timeStamp, {
+      ready: !busy && !touch?.pair && !held,
+      moving: busy ? moving : touch?.pair ? touch.direction : held ? Math.sign(delta) : 0,
+      now: performance.now(),
+    });
+    watch();
     if (direction) go(index + direction);
   }, { passive: false });
 
@@ -103,14 +137,15 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     else if (event.key === 'End') next = panels.length - 1;
     else return;
     event.preventDefault();
-    go(next);
+    // One press, one section: a key held down does not carry on once the move is over.
+    if (!event.repeat && !isHeld()) go(next);
   });
 
   // On touch screens the section follows the finger and completes the move on release.
   root.addEventListener('touchstart', event => {
     if (touch?.pair) return;
     touch = undefined;
-    if (busy || isCaptured() || event.touches.length !== 1) return;
+    if (busy || isCaptured() || isHeld() || event.touches.length !== 1) return;
     const point = event.touches[0];
     touch = { id: point.identifier, x: point.clientX, y: point.clientY, lastY: point.clientY, lastTime: event.timeStamp, velocity: 0 };
   }, { passive: true });
@@ -129,6 +164,7 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
       if (target < 0 || target >= panels.length) { touch = undefined; return; }
       Object.assign(touch, { direction, target, pair: pairOf(index, target), origin: point.clientY });
       lift(touch.pair);
+      panels[index].classList.add('is-departing');
     }
     event.preventDefault();
     const elapsed = Math.max(1, event.timeStamp - touch.lastTime);
@@ -164,23 +200,23 @@ export function createStack(root, { reducedMotion, isCaptured = () => false, onS
     const target = link ? indexOfHash(link.getAttribute('href')) : -1;
     if (target < 0) return;
     event.preventDefault();
-    go(target);
+    if (!isHeld()) go(target);
   });
   window.addEventListener('hashchange', () => {
     const target = indexOfHash(window.location.hash);
-    if (target >= 0) go(target);
+    if (target >= 0 && !isHeld()) go(target);
   });
   // Focus or an anchor may still try to scroll the clipped layers.
   root.addEventListener('scroll', () => root.scrollTo(0, 0));
 
   document.documentElement.classList.add('has-stack');
-  settle();
+  settle(true);
 
   return {
     panels,
     go,
     // A gesture handed over by embedded content is over: its inertia must not change section.
-    spend: direction => gate.spend(direction, performance.now()),
+    spend: direction => { gate.spend(direction, performance.now()); watch(); },
     get index() { return index; },
   };
 }

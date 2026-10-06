@@ -3,6 +3,7 @@ const DESKTOP = Object.freeze({ width: 1440, height: 900 });
 const WINDOW_BAR = 38;
 const WINDOW_EDGE = 5;
 const MORPH = 780;
+const KEYS = 3;   // how far the side keys stand out of the phone
 
 // Outer size of the device for the room the layout leaves, with its screen on whole pixels.
 export function deviceSize(view, room) {
@@ -75,6 +76,7 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
   function reflect() {
     section.classList.toggle('is-veiled', !ready);
     section.classList.toggle('is-demo-active', active);
+    section.classList.toggle('is-zoomed', active && view === 'mobile');
     section.classList.toggle('is-demo-loading', active && !ready);
     document.body.classList.toggle('is-demo-active', active);
     activation.hidden = active;
@@ -90,15 +92,32 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
     }
   }
 
+  // Explored on the phone, the device comes forward: to the middle of the screen, as large as it fits
+  // there whole, its side keys included. Measured from layout, so its own zoom does not count.
+  function aimZoom() {
+    let x = 0, y = 0;
+    for (let at = stage; at && at !== section; at = at.offsetParent) { x += at.offsetLeft; y += at.offsetTop; }
+    const width = stage.offsetWidth, height = stage.offsetHeight;
+    const room = { width: section.clientWidth, height: section.clientHeight };
+    const margin = Math.max(12, Math.min(28, Math.min(room.width, room.height) * .03));
+    const zoom = Math.min((room.width - margin * 2) / (width + KEYS * 2), (room.height - margin * 2) / height);
+    const ratio = window.devicePixelRatio || 1, snap = value => Math.round(value * ratio) / ratio;
+    stage.style.setProperty('--zoom-x', `${snap(room.width / 2 - x - width / 2)}px`);
+    stage.style.setProperty('--zoom-y', `${snap(room.height / 2 - y - height / 2)}px`);
+    stage.style.setProperty('--zoom-scale', zoom.toFixed(4));
+  }
+
   function scale() {
     if (demo) demo.style.transform = `scale(${viewport.clientWidth / parseFloat(demo.style.width)})`;
   }
 
-  // The second picture is only needed once the section has been seen.
+  // The second picture is only needed once the section has been seen, or while the page prepares. Returns the
+  // pictures it starts.
   function prime() {
-    section.querySelectorAll('.demo-poster[data-src]').forEach(poster => {
+    return [...section.querySelectorAll('.demo-poster[data-src]')].map(poster => {
       poster.src = poster.dataset.src;
       poster.removeAttribute('data-src');
+      return poster;
     });
   }
 
@@ -174,6 +193,7 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
   function activate() {
     if (active || isMoving() || section.classList.contains('is-morphing')) return;
     active = true;
+    if (view === 'mobile') aimZoom();
     mount();
     reflect();
     announce('Carregando a demonstração.');
@@ -218,6 +238,8 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
   }
 
   activation.addEventListener('click', activate);
+  // The whole phone answers a click, its frame as much as its screen.
+  frame.addEventListener('click', event => { if (!event.target.closest('a')) activate(); });
   document.addEventListener('click', event => {
     if (active && !frame.contains(event.target)) deactivate();
   }, true);
@@ -307,6 +329,7 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
     if (compact.matches && view === 'desktop') setView('mobile', { animate: false });
     fit();
     if (section.classList.contains('is-staged')) aim();
+    if (section.classList.contains('is-zoomed')) aimZoom();
   }
 
   if ('ResizeObserver' in window) {
@@ -318,5 +341,8 @@ export function initShowcase(section, { reducedMotion, onView, onRelease, onPose
   fit();
   reflect();
 
-  return { setView, stageEntrance, enter, leave, rest, isActive: () => active };
+  // Where the computer format exists, its picture is fetched ahead too.
+  const preload = () => compact.matches ? [] : prime();
+
+  return { setView, stageEntrance, enter, leave, rest, preload, isActive: () => active };
 }
