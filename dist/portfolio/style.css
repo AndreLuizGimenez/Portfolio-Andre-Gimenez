@@ -22,9 +22,6 @@
   --track-edge: #314a57;
   --stage: #e9eff0;
   --dune-side: #dde8ea;
-  --dune-far: #d8e6e8;
-  --dune-mid: #c3d9de;
-  --dune-near: #8fb6c7;
   --device-body: #0c1419;
   --device-rim: #4a5c68;
   --device-side: #2a3944;
@@ -201,9 +198,6 @@ h1, h2, p, ul { margin: 0; }
 .project-backdrop svg { display: block; width: 100%; height: 100%; }
 .project-backdrop path { transition: fill .5s var(--ease); }
 .dune-side { fill: var(--dune-side); }
-.dune-far { fill: var(--dune-far); }
-.dune-mid { fill: var(--dune-mid); }
-.dune-near { fill: var(--dune-near); }
 .project-shell {
   display: flex;
   position: relative;
@@ -433,7 +427,7 @@ html:not(.has-stack) .video-toggle { display: none; }
   .project-copy { --pane-pad: 28px 26px 26px; }
   .device-stage { margin-left: 0; }
 }
-:root[data-theme="night"] { color-scheme: dark; --paper: #0e1921; --ink: #edf3f4; --muted: #a5b9c4; --deep-blue: #86adc8; --blue: #82b9ce; --wave-back: #12212c; --wave-middle: #172733; --wave-front: #10202b; --track: #314b5c; --track-edge: #213846; --stage: #0f1c26; --dune-side: #122431; --dune-far: #13242f; --dune-mid: #18303f; --dune-near: #24506b; --device-rim: #5d7180; --device-side: #33454f; }
+:root[data-theme="night"] { color-scheme: dark; --paper: #0e1921; --ink: #edf3f4; --muted: #a5b9c4; --deep-blue: #86adc8; --blue: #82b9ce; --wave-back: #12212c; --wave-middle: #172733; --wave-front: #10202b; --track: #314b5c; --track-edge: #213846; --stage: #0f1c26; --dune-side: #122431; --device-rim: #5d7180; --device-side: #33454f; }
 @media (max-width: 760px) {
   .hero-shell { width: calc(100% - 36px); padding-block: 24px; }
   .hero-topline { gap: 11px; }

@@ -8,11 +8,11 @@ Cada seção é uma camada opaca do tamanho da viewport. Ao avançar, a próxima
 
 Um gesto vale uma seção. A inércia do trackpad continua emitindo rolagem por mais de um segundo depois que os dedos saem; como ela só decresce, o passo fica gasto até a rolagem pausar ou voltar a subir de forma clara. Uma roda girada sem parar também move uma seção por vez. No toque, a seção acompanha o dedo e, ao soltar, completa o movimento ou retorna, sem parar entre duas.
 
-As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo com dunas mais profundas atrás do aparelho.
+As seções alternam tonalidade: a abertura usa o papel claro com ondas discretas; o projeto usa um azul-gelo liso atrás do aparelho, com uma única lâmina de vidro à direita, atrás do texto.
 
 ## Fundo em Liquid Glass
 
-As ondas da abertura e as dunas do projeto são lâminas de vidro líquido empilhadas. Silhuetas, posições e tons médios são os das formas originais; a segunda seção tem uma duna a mais, à direita, para passar por trás do texto.
+As ondas da abertura são lâminas de vidro líquido empilhadas, com as silhuetas, posições e tons médios das formas originais. Na segunda seção há uma só lâmina, à direita, que sobe por trás do painel de texto; as três dunas que ficavam atrás do aparelho foram retiradas, porque pesavam mais do que ajudavam.
 
 Não há linha dura entre as camadas. A borda de cada lâmina é um ombro arredondado e largo: a vista através dele começa sem desvio no contorno, alcança mais longe um terço adiante e volta ao normal, de modo que o que passa por trás é espremido contra o contorno e depois esticado, sem rasgar. A luz aparece como um lóbulo suave com um fio fino dentro, no ponto em que a inclinação do ombro devolve a luz, e por isso desliza pela borda quando ela se move. O tom da lâmina escurece de leve em direção ao contorno, como a borda de um vidro grosso.
 

@@ -1,7 +1,7 @@
 // Glass backdrops. The flat shapes of a backdrop become stacked sheets of clear liquid glass that swell and
 // slide over each other, and a clear pane lies behind each block of text. One WebGL2 canvas per backdrop
 // draws both, a frame at a time; the SVG underneath stays as the fallback.
-import { fragment, vertex } from './backdrop-glsl.js?v=9';
+import { fragment, vertex } from './backdrop-glsl.js?v=10';
 
 const BUDGET = 3.6e6;          // canvas pixels per backdrop
 const COLUMNS = 1024;          // samples of each edge across its span
