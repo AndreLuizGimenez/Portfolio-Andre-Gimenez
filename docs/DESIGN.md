@@ -12,11 +12,19 @@ As seções alternam tonalidade: a abertura usa o papel claro com ondas discreta
 
 ## Fundo em Liquid Glass
 
-As ondas da abertura e as dunas do projeto são placas de vidro empilhadas, não blocos de cor. Silhuetas, posições e proporções são as das formas originais, e cada placa conserva em média o tom que tinha quando era sólida.
+As ondas da abertura e as dunas do projeto são lâminas de vidro líquido empilhadas. Silhuetas, posições e tons médios são os das formas originais; a segunda seção tem uma duna a mais, à direita, para passar por trás do texto.
 
-Cada placa é clara no miolo e tem uma borda convexa larga, de cerca de 7% do menor lado da janela. Nessa faixa ela desloca a imagem de tudo o que está atrás, cada vez mais quanto mais perto da borda, de modo que as bordas das placas de trás aparecem dobradas e a cor de fora é puxada para dentro. Completam o material um fio de luz na borda voltada para a luz, a face iluminada que dá a espessura, uma linha escura onde essa face termina e a sombra que a placa projeta sobre o que está atrás. A luz vem do mesmo lado que nas lentes dos seletores.
+Não há linha dura entre as camadas. A borda de cada lâmina é um ombro arredondado e largo: a vista através dele começa sem desvio no contorno, alcança mais longe um terço adiante e volta ao normal, de modo que o que passa por trás é espremido contra o contorno e depois esticado, sem rasgar. A luz aparece como um lóbulo suave com um fio fino dentro, no ponto em que a inclinação do ombro devolve a luz, e por isso desliza pela borda quando ela se move. O tom da lâmina escurece de leve em direção ao contorno, como a borda de um vidro grosso.
 
-O brilho e a sombra ficam nas bordas; o interior das placas continua calmo. Onde há texto por cima, a borda perde quase todo o brilho e a sombra e sobra apenas o degrau de cor, para nenhuma linha clara atravessar as letras. Em telas estreitas, onde as curvas ficam fechadas, a faixa encolhe até caber na curva, senão o vidro dobraria a imagem sobre si mesma. Não há formas, padrões nem texturas novas: o vidro só refrata o papel e as outras placas.
+O movimento é lento e contínuo: duas ondulações percorrem cada borda, uma curta que se vê andar e uma longa por baixo, em sentidos opostos nas lâminas vizinhas; cada lâmina também desliza de lado como um todo e a largura do ombro respira com a ondulação. Com o mouse, as lâminas cedem alguns pixels, as da frente mais. Como as camadas se movem umas contra as outras, as bordas das de trás passam sob os ombros das da frente e são dobradas à vista.
+
+## Painéis de vidro
+
+Atrás do bloco de texto da abertura (nome, função, descrição e seletor) e da coluna de texto do projeto há um painel de vidro transparente, com cantos bem arredondados. O centro é limpo. A faixa da borda, com cerca de um quarto da menor metade do painel, olha para uma tira fina junto à sua margem interna e a estica por toda a faixa, cada cor um pouco diferente: quando uma onda passa por trás, ela aparece puxada em listras perpendiculares à borda, com uma franja de cor discreta. Um fio claro e um fio escuro desenham o contorno; a sombra é mínima.
+
+O texto fica sempre para dentro da faixa da borda, e dali para dentro as lâminas atrás do painel perdem quase toda a luz e a sombra das suas bordas, restando o degrau de tom. O painel também puxa de leve o que está atrás em direção à cor da página. Com isso todo texto mantém contraste AA contra o pixel mais desfavorável do fundo, nos dois temas.
+
+O painel chega junto com o texto: na abertura, quando o título assenta; no projeto, vindo da esquerda um pouco antes dos textos.
 
 ## Primeira seção
 
@@ -44,7 +52,7 @@ Ao escolher Computador, o corpo do celular muda de largura, altura, raio e moldu
 
 O título e a descrição dividem a faixa do alto, o vídeo ocupa o maior quadro 16:9 que cabe no meio, numa moldura escura como a do aparelho da segunda seção, e o contato fecha a tela: o ícone do WhatsApp à esquerda e o número em Manrope grande, os dois dentro do mesmo link. O verde do ícone é o único ponto de cor fora da paleta azul, de propósito: é a ação que a página pede.
 
-O vídeo começa sozinho, sem som, e repete sem parar. O botão de pausa fica no canto da moldura e só aparece com o cursor sobre o vídeo, ou quando ele está pausado. Ao subir, título, descrição, vídeo e contato se acomodam em sequência com a mesma curva dos textos da abertura; revelada por baixo, a seção já está pronta. O fundo desta seção ainda é o papel liso, sem placas de vidro.
+O vídeo começa sozinho, sem som, e repete sem parar. O botão de pausa fica no canto da moldura e só aparece com o cursor sobre o vídeo, ou quando ele está pausado. Ao subir, título, descrição, vídeo e contato se acomodam em sequência com a mesma curva dos textos da abertura; revelada por baixo, a seção já está pronta. O fundo desta seção ainda é o papel liso, sem vidro.
 
 Uma seção pulada por um salto direto (Home, End ou um link) não fica presa na pose de espera: quando é descoberta por cima aparece no lugar, e toda seção que volta a ficar abaixo da atual recomeça sua entrada na próxima subida.
 
@@ -66,6 +74,10 @@ A composição dos blocos de texto roda uma vez no carregamento, em cerca de 7 a
 
 As animações de entrada e a troca de seção usam apenas transformações e opacidade. Seções cobertas ficam ocultas e inertes. As camadas de profundidade do celular só existem durante o giro.
 
-O fundo em vidro é calculado uma vez por tamanho de janela, num worker, e vira uma imagem parada; o worker é encerrado em seguida. Enquanto a janela é arrastada a imagem antiga apenas estica, e o novo cálculo só acontece quando o tamanho para de mudar. Os dois temas saem do mesmo cálculo, então trocar de tema é apenas um esmaecimento entre duas imagens. A resolução tem teto fixo, igual numa tela 4K e num celular. Sem JavaScript ou sem worker ficam as formas sólidas.
+O fundo em vidro é desenhado pela placa de vídeo, um canvas por seção. Só a seção na tela desenha, a cerca de 30 quadros por segundo (o movimento é lento e não pede mais), e a 60 enquanto um tema troca ou um painel entra. Fora da tela, com a aba oculta ou com a demonstração do e-commerce ativa, não desenha nada. A parte da página acima da onda mais alta e do painel nem é calculada.
+
+A resolução do canvas tem teto fixo. Depois de alguns segundos um quadro é cronometrado até o fim; se a placa de vídeo levar mais de 6 ms, o canvas fica mais grosso, nunca abaixo de um pixel por pixel de CSS. Trocar de tema é uma mistura dos parâmetros dentro do mesmo desenho, sem imagens guardadas.
+
+Sem WebGL2, se o shader não compilar ou se o contexto for perdido, voltam as formas sólidas, com uma folha translúcida simples no lugar do painel. Sem JavaScript ficam só as formas sólidas.
 
 O código da versão anterior foi preservado em [`pasta temporaria/`](../pasta%20temporaria/), incluindo a exportação antiga e `sources-nival`.

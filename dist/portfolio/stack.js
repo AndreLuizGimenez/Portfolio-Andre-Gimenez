@@ -1,4 +1,4 @@
-import { createWheelGate } from './wheel-gate.js?v=8';
+import { createWheelGate } from './wheel-gate.js?v=9';
 
 const DURATION = 820;
 const EASING = 'cubic-bezier(.4, 0, .1, 1)';

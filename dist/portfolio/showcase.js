@@ -48,7 +48,7 @@ export function demoBoundaryState(win, delta) {
   return win.scrollY <= 2;
 }
 
-export function initShowcase(section, { reducedMotion, onView, onRelease } = {}) {
+export function initShowcase(section, { reducedMotion, onView, onRelease, onPose } = {}) {
   const zone = section.querySelector('.device-zone');
   const stage = section.querySelector('.device-stage');
   const frame = section.querySelector('.device-frame');
@@ -269,6 +269,7 @@ export function initShowcase(section, { reducedMotion, onView, onRelease } = {})
     ++entrance;
     section.classList.remove('is-entering');
     section.classList.toggle('is-staged', !reducedMotion.matches);
+    onPose?.(reducedMotion.matches ? 'present' : 'staged');
     if (!reducedMotion.matches) aim();
   }
 
@@ -276,8 +277,9 @@ export function initShowcase(section, { reducedMotion, onView, onRelease } = {})
   function enter(rising = true) {
     if (!section.classList.contains('is-staged')) { prime(); return; }
     const run = ++entrance;
-    if (!rising) { section.classList.remove('is-staged'); prime(); return; }
+    if (!rising) { section.classList.remove('is-staged'); onPose?.('present'); prime(); return; }
     section.classList.replace('is-staged', 'is-entering');
+    onPose?.('entering');
     const animations = section.getAnimations({ subtree: true }).filter(animation => 'animationName' in animation);
     Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
       if (run !== entrance) return;
@@ -292,6 +294,7 @@ export function initShowcase(section, { reducedMotion, onView, onRelease } = {})
     if (!isMoving()) return;
     ++entrance;
     section.classList.remove('is-staged', 'is-entering');
+    onPose?.('present');
   }
 
   // The section is out of view below: its next entry starts over, on the phone.

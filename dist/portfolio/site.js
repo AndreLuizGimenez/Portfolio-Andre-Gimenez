@@ -1,9 +1,10 @@
 'use strict';
 
-import { createStack } from './stack.js?v=8';
-import { initShowcase } from './showcase.js?v=8';
-import { initReel } from './reel.js?v=8';
-import { initTypeset } from './typeset.js?v=8';
+import { createStack } from './stack.js?v=9';
+import { initShowcase } from './showcase.js?v=9';
+import { initReel } from './reel.js?v=9';
+import { initTypeset } from './typeset.js?v=9';
+import { initBackdrops } from './backdrop.js?v=9';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -78,8 +79,17 @@ const stack = createStack(document.querySelector('.stack'), {
   },
 });
 initTypeset([...document.querySelectorAll('.hero-description, .project-lead, .project-description')]);
+// After the text is set: the panes of glass hug it.
+const backdrops = initBackdrops({ reducedMotion });
 const showcase = initShowcase(project, {
   reducedMotion,
+  // The pane behind the text comes in just ahead of it, from the same side.
+  onPose(pose) {
+    const pane = backdrops.pane(project);
+    if (pose === 'staged') pane.stage();
+    else if (pose === 'entering') pane.arrive({ delay: 380, shift: [-.45 * parseFloat(getComputedStyle(project).getPropertyValue('--enter-text')) || -90, 0] });
+    else pane.show();
+  },
   onView: (view, animate) => viewSwitch.select(view, animate),
   onRelease: direction => stack.spend(direction),
 });
@@ -95,7 +105,9 @@ async function initHeroSequence() {
   const title = hero?.querySelector('.hero-title');
   const pieces = [...(title?.querySelectorAll('.hero-piece') || [])];
   if (!hero || !title) return;
+  const pane = backdrops.pane(hero);
   const settleAll = () => {
+    pane.show();
     hero.classList.add('hero-complete', 'hero-ready');
     title.classList.add('is-settled');
     document.querySelectorAll('.hero-secondary').forEach(element => element.classList.add('is-settled'));
@@ -103,6 +115,7 @@ async function initHeroSequence() {
   // A visit that opens on a later section finds the opening already built underneath.
   if (reducedMotion.matches || stack.index > 0) { settleAll(); return; }
   document.documentElement.classList.add('hero-motion-ready');
+  pane.stage();
   // Begin with the final font metrics rather than animating a fallback typeface.
   await document.fonts.ready;
   if (reducedMotion.matches) { settleAll(); return; }
@@ -115,6 +128,7 @@ async function initHeroSequence() {
       if (event.target !== title || event.animationName !== 'title-settle') return;
       title.classList.add('is-settled');
       hero.classList.add('hero-ready');
+      pane.arrive();
       title.removeEventListener('animationend', onTitleSettled);
     };
     title.addEventListener('animationend', onTitleSettled);

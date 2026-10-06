@@ -21,6 +21,7 @@
   --track: #415b69;
   --track-edge: #314a57;
   --stage: #e9eff0;
+  --dune-side: #dde8ea;
   --dune-far: #d8e6e8;
   --dune-mid: #c3d9de;
   --dune-near: #8fb6c7;
@@ -71,14 +72,16 @@ h1, h2, p, ul { margin: 0; }
 .wave-back { fill: var(--wave-back); }
 .wave-middle { fill: var(--wave-middle); }
 .wave-front { fill: var(--wave-front); }
-/* Glass plates drawn by backdrop.js cover the flat shapes; the night render fades in over the day one.
+/* backdrop.js draws the shapes as drifting glass plates, and a glass pane behind each [data-pane] block of text.
    It reads both palettes from the :root and :root[data-theme="night"] rules, by those exact selectors. */
-.backdrop-glass { position: absolute; opacity: 0; transition: opacity .6s var(--ease); }
+.backdrop-glass { display: block; position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .6s var(--ease); }
 .backdrop-glass.is-drawn { opacity: 1; }
-.backdrop-glass canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
-.backdrop-glass .glass-night { opacity: 0; transition: opacity .5s var(--ease); }
-:root[data-theme="night"] .glass-night { opacity: 1; }
 .has-glass > svg { visibility: hidden; }
+/* Without WebGL the pane is a plain translucent sheet. */
+.pane-plain { position: absolute; border: 1px solid rgb(255 255 255 / .7); background: rgb(255 255 255 / .36); box-shadow: 0 18px 40px -22px rgb(28 53 70 / .3); transition: opacity .6s var(--ease); }
+:root[data-theme="night"] .pane-plain { border-color: rgb(176 214 236 / .26); background: rgb(150 190 214 / .07); box-shadow: none; }
+/* Room the pane takes around its text, and its corners. */
+[data-pane] { --pane-pad: 30px 38px 26px; --pane-radius: 40px; }
 
 .hero-section { width: 100%; height: 100vh; height: 100svh; }
 .hero-shell {
@@ -103,7 +106,7 @@ h1, h2, p, ul { margin: 0; }
   align-items: baseline;
   gap: .035em .22em;
   max-width: 100%;
-  margin: clamp(14px, 2vh, 22px) 0 clamp(28px, 4.4vh, 44px);
+  margin: clamp(14px, 2vh, 22px) 0 calc(.085em + var(--pane-clear, 50px));
   color: var(--ink);
   font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: clamp(4rem, 10.5vw, 10rem);
@@ -115,7 +118,7 @@ h1, h2, p, ul { margin: 0; }
 }
 .hero-piece { display: inline-block; transform-origin: 50% 80%; }
 .hero-piece-accent { color: var(--deep-blue); }
-.hero-support { display: flex; flex-direction: column; align-items: center; width: min(590px, 100%); text-align: center; }
+.hero-support { --pane-pad: 30px 42px 30px; display: flex; flex-direction: column; align-items: center; width: min(590px, 100%); text-align: center; }
 .hero-name { color: var(--ink); font-size: clamp(1.125rem, 1.6vw, 1.4375rem); font-weight: 550; letter-spacing: -.025em; line-height: 1.35; }
 .hero-role { margin-top: 8px; color: var(--deep-blue); font-size: .875rem; font-weight: 500; letter-spacing: .015em; line-height: 1.35; }
 .hero-description { max-width: 540px; margin-top: 19px; color: var(--muted); font-size: clamp(1rem, 1.2vw, 1.125rem); line-height: 1.55; text-wrap: balance; }
@@ -197,6 +200,7 @@ h1, h2, p, ul { margin: 0; }
 .project-backdrop { position: absolute; z-index: 0; inset: 0; pointer-events: none; }
 .project-backdrop svg { display: block; width: 100%; height: 100%; }
 .project-backdrop path { transition: fill .5s var(--ease); }
+.dune-side { fill: var(--dune-side); }
 .dune-far { fill: var(--dune-far); }
 .dune-mid { fill: var(--dune-mid); }
 .dune-near { fill: var(--dune-near); }
@@ -207,14 +211,14 @@ h1, h2, p, ul { margin: 0; }
   align-items: center;
   justify-content: center;
   gap: clamp(40px, 5vw, 80px);
-  width: min(1280px, calc(100% - 96px));
+  width: min(1280px, calc(100% - 128px));
   min-height: 100vh;
   min-height: 100svh;
   margin-inline: auto;
   padding: clamp(24px, 6.5vh, 64px) 0;
 }
 .has-stack .project-shell { height: 100%; min-height: 0; }
-.project-copy { position: relative; z-index: 1; flex: 0 0 auto; width: clamp(292px, 28.5vw, 400px); }
+.project-copy { --pane-pad: 34px 36px 30px; position: relative; z-index: 1; flex: 0 0 auto; width: clamp(292px, 28.5vw, 400px); }
 .project-index { color: var(--deep-blue); font-size: .75rem; font-weight: 550; letter-spacing: .12em; line-height: 1.4; text-transform: uppercase; }
 .project-title {
   margin-top: 14px;
@@ -424,19 +428,26 @@ html:not(.has-stack) .video-toggle { display: none; }
 .is-waiting .rise { opacity: 0; transform: translateY(18px) scale(.985, 1.02); }
 .is-arriving .rise { animation: support-settle .6s var(--settle) both; animation-delay: calc(.34s + var(--order, 0) * .08s); }
 
-:root[data-theme="night"] { color-scheme: dark; --paper: #0e1921; --ink: #edf3f4; --muted: #a5b9c4; --deep-blue: #86adc8; --blue: #82b9ce; --wave-back: #12212c; --wave-middle: #172733; --wave-front: #10202b; --track: #314b5c; --track-edge: #213846; --stage: #0f1c26; --dune-far: #13242f; --dune-mid: #18303f; --dune-near: #24506b; --device-rim: #5d7180; --device-side: #33454f; }
+@media (max-width: 960px) and (min-width: 761px) {
+  .project-shell { width: calc(100% - 96px); }
+  .project-copy { --pane-pad: 28px 26px 26px; }
+  .device-stage { margin-left: 0; }
+}
+:root[data-theme="night"] { color-scheme: dark; --paper: #0e1921; --ink: #edf3f4; --muted: #a5b9c4; --deep-blue: #86adc8; --blue: #82b9ce; --wave-back: #12212c; --wave-middle: #172733; --wave-front: #10202b; --track: #314b5c; --track-edge: #213846; --stage: #0f1c26; --dune-side: #122431; --dune-far: #13242f; --dune-mid: #18303f; --dune-near: #24506b; --device-rim: #5d7180; --device-side: #33454f; }
 @media (max-width: 760px) {
   .hero-shell { width: calc(100% - 36px); padding-block: 24px; }
   .hero-topline { gap: 11px; }
   .hero-content { padding-block: 20px; }
   .hero-kicker { font-size: .75rem; letter-spacing: .1em; }
-  .hero-title { font-size: clamp(2.75rem, 12.7vw, 5.75rem); gap: .025em .16em; margin-top: 18px; margin-bottom: 28px; letter-spacing: -.055em; }
+  .hero-title { --pane-clear: 38px; font-size: clamp(2.75rem, 12.7vw, 5.75rem); gap: .025em .16em; margin-top: 18px; letter-spacing: -.055em; }
+  [data-pane] { --pane-radius: 30px; }
+  .hero-support { --pane-pad: 22px 18px 20px; width: min(590px, calc(100% - 20px)); }
   .hero-description { max-width: 31rem; font-size: 1rem; }
   .theme-stage { margin-top: 24px; }
   .theme-toggle button { width: 116px; }
   .project-section { --enter-text: 34vw; }
-  .project-shell { flex-direction: column; justify-content: flex-start; gap: 20px; width: calc(100% - 36px); padding-block: 22px 20px; }
-  .project-copy { width: 100%; text-align: center; }
+  .project-shell { flex-direction: column; justify-content: flex-start; gap: 34px; width: calc(100% - 36px); padding-block: 34px 20px; }
+  .project-copy { --pane-pad: 20px 18px 18px; width: calc(100% - 20px); text-align: center; }
   .project-title { margin-top: 10px; font-size: clamp(2.5rem, 11.5vw, 3.5rem); }
   .project-lead { margin-top: 12px; font-size: 1.0625rem; }
   .project-description { max-width: 31rem; margin: 10px auto 0; font-size: .9375rem; }
@@ -458,7 +469,8 @@ html:not(.has-stack) .video-toggle { display: none; }
 @media (max-height: 640px) and (min-width: 761px) {
   .hero-shell { padding-block: 20px; }
   .hero-content { padding-block: 12px; }
-  .hero-title { font-size: min(10vw, 21vh); margin-block: 12px 20px; }
+  .hero-title { --pane-clear: 36px; font-size: min(10vw, 21vh); margin-top: 12px; }
+  .hero-support { --pane-pad: 22px 40px 24px; }
   .hero-description { margin-top: 14px; }
   .theme-stage { margin-top: 16px; }
   .hero-footer { height: 24px; }
@@ -473,12 +485,21 @@ html:not(.has-stack) .video-toggle { display: none; }
 @media (max-height: 700px) and (max-width: 760px) {
   .hero-shell { padding-block: 16px; }
   .hero-content { padding-block: 12px; }
-  .hero-title { margin-block: 12px 20px; }
+  .hero-title { --pane-clear: 32px; margin-top: 12px; }
+  .hero-support { --pane-pad: 18px 18px 16px; }
   .hero-description { margin-top: 14px; }
   .theme-stage { margin-top: 18px; }
   .hero-footer { height: 24px; }
-  .project-shell { gap: 14px; padding-block: 16px 14px; }
+  .project-shell { gap: 28px; padding-block: 28px 14px; }
+  .project-copy { --pane-pad: 16px 18px 14px; }
   .technology-list { display: none; }
+}
+@media (max-width: 340px) {
+  .hero-support { --pane-pad: 18px 12px 16px; width: 100%; }
+}
+@media (max-height: 600px) and (max-width: 760px) {
+  .project-shell { gap: 22px; padding-block: 22px 12px; }
+  .project-copy { --pane-pad: 12px 16px 10px; }
 }
 @media (hover: none) {
   .for-pointer { display: none; }
