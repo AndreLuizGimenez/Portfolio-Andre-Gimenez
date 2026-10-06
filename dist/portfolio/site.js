@@ -2,6 +2,7 @@
 
 import { createStack } from './stack.js?v=5';
 import { initShowcase } from './showcase.js?v=5';
+import { initReel } from './reel.js?v=5';
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -56,15 +57,23 @@ applyTheme(initialTheme, false);
 
 // The stack comes first: everything after it measures the layout it puts in place.
 const project = document.querySelector('#ecommerce');
+const game = document.querySelector('#jogo');
 const stack = createStack(document.querySelector('.stack'), {
   reducedMotion,
   isCaptured: () => showcase.isActive(),
   onStart({ from, to, direction }) {
     if (stack.panels[from] === project) showcase.leave();
-    if (stack.panels[to] === project && direction > 0) showcase.enter();
+    if (stack.panels[to] === project) {
+      showcase.enter(direction > 0);
+      reel.warm();
+    }
+    if (stack.panels[to] === game) reel.show(direction > 0);
   },
   onEnd({ from, to }) {
-    if (stack.panels[from] === project && to < from) showcase.rest();
+    if (stack.panels[from] === game) reel.hide();
+    // A section left below the current one will rise again, so it starts over.
+    if (to < stack.panels.indexOf(project)) showcase.rest();
+    if (to < stack.panels.indexOf(game)) reel.stage();
   },
 });
 const showcase = initShowcase(project, {
@@ -73,8 +82,11 @@ const showcase = initShowcase(project, {
   onRelease: direction => stack.spend(direction),
 });
 const viewSwitch = createSwitch(project.querySelector('.view-switch'), 'viewChoice', view => showcase.setView(view));
+const reel = initReel(game, { reducedMotion });
 showcase.stageEntrance();
-if (stack.panels[stack.index] === project) requestAnimationFrame(() => showcase.enter());
+reel.stage();
+if (stack.panels[stack.index] === project) requestAnimationFrame(() => { showcase.enter(); reel.warm(); });
+if (stack.panels[stack.index] === game) requestAnimationFrame(() => reel.show(true));
 
 async function initHeroSequence() {
   const hero = document.querySelector('.hero-section');

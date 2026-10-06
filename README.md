@@ -1,6 +1,6 @@
 # Portfólio — André Gimenez
 
-A versão ativa do site tem duas seções de viewport inteira: a apresentação inicial e o projeto de e-commerce. O restante do código da versão anterior está preservado em [`pasta temporaria/`](pasta%20temporaria/).
+A versão ativa do site tem três seções de viewport inteira: a apresentação inicial, o projeto de e-commerce e o jogo em desenvolvimento, que termina com o contato. O restante do código da versão anterior está preservado em [`pasta temporaria/`](pasta%20temporaria/).
 
 ## Navegação entre seções
 
@@ -20,9 +20,17 @@ Mostra o e-commerce ao lado do aparelho que o exibe. Ao entrar em cena, o celula
 
 O aparelho mostra uma imagem da primeira tela do site. A demonstração real, que é uma aplicação inteira, só é carregada quando alguém clica na tela e é removida ao sair (Esc, clique fora, troca de formato ou mudança de seção). Assim as duas seções permanecem leves e nenhuma animação do portfólio disputa o processador com a demonstração.
 
+## Terceira seção
+
+Apresenta a gameplay do jogo em desenvolvimento na Unreal Engine: título e descrição no alto, o vídeo no centro e, abaixo dele, o ícone do WhatsApp com o número de celular, juntos num único link `wa.me` que abre a conversa.
+
+O vídeo toca sozinho, sem som e em loop enquanto a seção está na tela, e pausa quando ela sai ou a aba fica oculta. Um botão no canto do vídeo pausa e retoma. Com a preferência de movimento reduzido do sistema ele não inicia sozinho.
+
+O arquivo do vídeo tem 6,9 MB e não é pedido na abertura do site: ele e seu pôster só começam a carregar quando o visitante chega à segunda seção. O ícone do WhatsApp foi gerado pelo Codex e exportado em 192 × 192.
+
 ## Fundo
 
-As formas do fundo das duas seções são placas de vidro translúcido empilhadas: cada uma refrata, tinge e ilumina a imagem de tudo o que está atrás dela, com a distorção concentrada numa faixa larga antes da borda. As silhuetas, posições e cores de base são as mesmas das formas sólidas, que continuam no HTML como fallback. O desenho é feito uma única vez por tamanho de janela, fora da thread principal, já nos dois temas; depois disso o fundo é só uma imagem parada.
+As formas do fundo das duas primeiras seções são placas de vidro translúcido empilhadas: cada uma refrata, tinge e ilumina a imagem de tudo o que está atrás dela, com a distorção concentrada numa faixa larga antes da borda. As silhuetas, posições e cores de base são as mesmas das formas sólidas, que continuam no HTML como fallback. O desenho é feito uma única vez por tamanho de janela, fora da thread principal, já nos dois temas; depois disso o fundo é só uma imagem parada.
 
 ## Prévia local
 
@@ -36,16 +44,19 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 
 ## Arquivos ativos
 
-- `dist/index.html`: as duas seções.
+- `dist/index.html`: as três seções.
 - `dist/portfolio/style.css`: composição, tipografia, temas, Liquid Glass, pilha e aparelho.
 - `dist/portfolio/site.js`: tema, seletores, animação de abertura e ligação entre os módulos.
 - `dist/portfolio/stack.js`: navegação em pilha por roda, trackpad, toque e teclado.
 - `dist/portfolio/wheel-gate.js`: controle de inércia, um passo por gesto.
 - `dist/portfolio/showcase.js`: aparelho, troca de formato, entrada e demonstração sob demanda.
+- `dist/portfolio/reel.js`: vídeo da terceira seção, carregado e tocado só quando a seção se aproxima.
 - `dist/portfolio/glass.js`: refração geométrica das lentes.
 - `dist/portfolio/backdrop.js`: lê as formas e as cores do fundo e entrega o desenho a um worker.
 - `dist/portfolio/backdrop-worker.js`: desenha as placas de vidro, por software, nos dois temas.
 - `dist/portfolio/nival-mobile.webp` e `nival-desktop.webp`: imagens da primeira tela, capturadas da própria demonstração em 414 × 852 e 1440 × 900.
+- `dist/portfolio/roda-roda.mp4` e `roda-roda-poster.jpg`: gameplay do jogo (12,5 s, Full HD, sem áudio) e seu pôster, vindos do site anterior.
+- `dist/portfolio/whatsapp-icon.jpg`: ícone do WhatsApp do link de contato.
 - `dist/demos/nival/`: demonstração compilada do e-commerce.
 - `pasta temporaria/dist-restante-2026-10-05/`: cópia completa da versão anterior.
 - `pasta temporaria/sources-nival/`: fonte isolada e dependências da demonstração.
@@ -53,7 +64,7 @@ Abra [http://127.0.0.1:4173/#inicio](http://127.0.0.1:4173/#inicio).
 ## Verificação
 
 ```sh
-for f in site stack showcase wheel-gate glass backdrop backdrop-worker; do node --check dist/portfolio/$f.js; done
+for f in site stack showcase reel wheel-gate glass backdrop backdrop-worker; do node --check dist/portfolio/$f.js; done
 node --test scripts/wheel-gate.test.mjs
 python3 scripts/check-assets.py
 ```

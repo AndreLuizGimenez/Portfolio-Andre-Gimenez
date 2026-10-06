@@ -379,6 +379,49 @@ body.is-demo-active .device-frame, body.is-demo-active .device-frame * { cursor:
   100% { opacity: 1; translate: 0 0; scale: 1; }
 }
 
+/* Third section: the gameplay clip, then the way to reach me. */
+.game-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(16px, 3.2vh, 30px);
+  width: min(1280px, calc(100% - 96px));
+  height: 100vh;
+  height: 100svh;
+  margin-inline: auto;
+  padding: clamp(24px, 6.5vh, 64px) 0;
+}
+.has-stack .game-shell { height: 100%; }
+.game-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: clamp(28px, 5vw, 80px); }
+.game-name { flex: 0 0 auto; }
+.game-copy { flex: 0 1 480px; }
+.game-copy .project-description { margin-top: 0; }
+.game-copy .technology-list { margin-top: 12px; }
+/* The frame takes the largest 16:9 box that the free row allows. */
+.game-stage { display: grid; place-items: center; min-height: 0; container-type: size; }
+.game-frame { position: relative; width: 100%; width: min(100cqw, 100cqh * 16 / 9); aspect-ratio: 16 / 9; padding: 7px; border-radius: 26px; background: var(--device-body); box-shadow: inset 0 0 0 1.5px var(--device-rim), 0 36px 64px -30px rgba(20, 44, 58, .5), 0 8px 20px rgba(12, 24, 32, .16); }
+.game-video { display: block; width: 100%; height: 100%; border-radius: 19px; background: #05090c; object-fit: cover; }
+.video-toggle { display: grid; position: absolute; bottom: 22px; left: 22px; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid rgba(255,255,255,.4); border-radius: 50%; background: var(--track); color: #fff; opacity: 0; transition: opacity .25s ease, background-color .5s var(--ease); }
+.video-toggle svg { display: block; width: 18px; height: 18px; }
+.game-frame:hover .video-toggle, .video-toggle:focus-visible, .game-frame.is-paused .video-toggle { opacity: 1; }
+.play-symbol, .is-paused .pause-symbol { display: none; }
+.is-paused .play-symbol { display: block; }
+/* Scripted control only: without scripting the clip keeps the browser's own. */
+html:not(.has-stack) .video-toggle { display: none; }
+.whatsapp-link { display: inline-flex; align-items: center; justify-self: center; gap: clamp(14px, 1.5vw, 22px); color: var(--ink); }
+.whatsapp-symbol { display: block; position: relative; flex: 0 0 auto; width: clamp(52px, 7.6vh, 68px); aspect-ratio: 1; overflow: hidden; border-radius: 24%; box-shadow: 0 12px 24px -12px rgba(14, 84, 48, .6), 0 3px 8px rgba(12, 24, 32, .14); transition: scale .32s var(--settle); }
+.whatsapp-symbol img { display: block; width: 100%; height: 100%; }
+.whatsapp-symbol::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 1px 1px rgba(255,255,255,.55), inset 0 -1px 1px rgba(6, 48, 26, .28); }
+.whatsapp-number { font-family: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif; font-size: clamp(1.6rem, 2.9vw, 2.5rem); font-weight: 600; letter-spacing: -.045em; line-height: 1; white-space: nowrap; font-synthesis: none; }
+.phone-country { color: var(--muted); font-weight: 500; }
+@media (hover: hover) { .whatsapp-link:hover .whatsapp-symbol { scale: 1.06; } }
+
+/* Heading, clip and contact settle one after the other, in the opening's own motion. */
+.game-copy.rise { --order: 1; }
+.game-stage.rise { --order: 2; }
+.whatsapp-link.rise { --order: 3; }
+.is-waiting .rise { opacity: 0; transform: translateY(18px) scale(.985, 1.02); }
+.is-arriving .rise { animation: support-settle .6s var(--settle) both; animation-delay: calc(.34s + var(--order, 0) * .08s); }
+
 :root[data-theme="night"] { color-scheme: dark; --paper: #0e1921; --ink: #edf3f4; --muted: #a5b9c4; --deep-blue: #86adc8; --blue: #82b9ce; --wave-back: #12212c; --wave-middle: #172733; --wave-front: #10202b; --track: #314b5c; --track-edge: #213846; --stage: #0f1c26; --dune-far: #13242f; --dune-mid: #18303f; --dune-near: #24506b; --device-rim: #5d7180; --device-side: #33454f; }
 @media (max-width: 760px) {
   .hero-shell { width: calc(100% - 36px); padding-block: 24px; }
@@ -400,6 +443,15 @@ body.is-demo-active .device-frame, body.is-demo-active .device-frame * { cursor:
   .demo-caption { margin-top: 10px; }
   .device-zone { order: 0; }
   .device-stage { margin-left: 0; }
+  .game-shell { grid-template-rows: auto auto auto; align-content: center; gap: 22px; width: calc(100% - 36px); padding-block: 22px; }
+  .game-heading { flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+  .game-copy { flex: none; max-width: 31rem; }
+  .game-copy .technology-list { justify-content: center; }
+  .game-stage { container-type: inline-size; }
+  .game-frame { width: 100%; padding: 5px; border-radius: 18px; }
+  .game-video { border-radius: 13px; }
+  .video-toggle { bottom: 14px; left: 14px; width: 40px; height: 40px; }
+  .whatsapp-number { font-size: clamp(1.45rem, 7vw, 1.9rem); }
 }
 @media (max-height: 640px) and (min-width: 761px) {
   .hero-shell { padding-block: 20px; }
@@ -414,6 +466,7 @@ body.is-demo-active .device-frame, body.is-demo-active .device-frame * { cursor:
   .project-description { margin-top: 10px; }
   .technology-list { margin-top: 12px; }
   .view-stage { margin-top: 8px; }
+  .game-shell { gap: 14px; padding-block: 18px; }
 }
 @media (max-height: 700px) and (max-width: 760px) {
   .hero-shell { padding-block: 16px; }
@@ -428,10 +481,12 @@ body.is-demo-active .device-frame, body.is-demo-active .device-frame * { cursor:
 @media (hover: none) {
   .for-pointer { display: none; }
   .for-touch { display: inline; }
+  .video-toggle { opacity: .9; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .hero-motion-ready .hero-secondary, .hero-motion-ready .hero-piece { opacity: 1; transform: none; clip-path: none; }
   .is-staged .device-flight, .is-staged .reveal { opacity: 1; translate: none; }
   .is-staged .device { transform: none; }
+  .is-waiting .rise { opacity: 1; transform: none; }
 }

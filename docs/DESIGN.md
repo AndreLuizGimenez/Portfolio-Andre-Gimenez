@@ -1,6 +1,6 @@
 # Direção visual
 
-O site é uma pilha de seções verticais de `100vh`, pensada primeiro para desktop e adaptada para telas menores. Estão ativas a abertura e o projeto de e-commerce.
+O site é uma pilha de seções verticais de `100vh`, pensada primeiro para desktop e adaptada para telas menores. Estão ativas a abertura, o projeto de e-commerce e o jogo em desenvolvimento.
 
 ## Pilha de seções
 
@@ -40,9 +40,19 @@ O celular tem Dynamic Island, barra de status e botões laterais, sem marca algu
 
 Ao escolher Computador, o corpo do celular muda de largura, altura, raio e moldura até virar uma janela no estilo macOS, com barra de título e três pontos. A imagem do site recebe blur e leve ampliação enquanto o corpo se remodela e volta a ficar nítida na chegada. Abaixo de 760 px de largura não há seletor: só a versão de celular.
 
+## Terceira seção
+
+O título e a descrição dividem a faixa do alto, o vídeo ocupa o maior quadro 16:9 que cabe no meio, numa moldura escura como a do aparelho da segunda seção, e o contato fecha a tela: o ícone do WhatsApp à esquerda e o número em Manrope grande, os dois dentro do mesmo link. O verde do ícone é o único ponto de cor fora da paleta azul, de propósito: é a ação que a página pede.
+
+O vídeo começa sozinho, sem som, e repete sem parar. O botão de pausa fica no canto da moldura e só aparece com o cursor sobre o vídeo, ou quando ele está pausado. Ao subir, título, descrição, vídeo e contato se acomodam em sequência com a mesma curva dos textos da abertura; revelada por baixo, a seção já está pronta. O fundo desta seção ainda é o papel liso, sem placas de vidro.
+
+Uma seção pulada por um salto direto (Home, End ou um link) não fica presa na pose de espera: quando é descoberta por cima aparece no lugar, e toda seção que volta a ficar abaixo da atual recomeça sua entrada na próxima subida.
+
 ## Leveza
 
 O aparelho exibe uma imagem do site em alta resolução. A demonstração real é carregada somente quando alguém clica na tela, com uma barra de progresso no topo, e é removida ao sair. Fora desse momento as duas seções não executam nada em segundo plano.
+
+O vídeo do jogo e seu pôster só são pedidos quando o visitante chega à seção anterior, e o vídeo só toca enquanto a sua seção está na tela.
 
 As animações de entrada e a troca de seção usam apenas transformações e opacidade. Seções cobertas ficam ocultas e inertes. As camadas de profundidade do celular só existem durante o giro.
 

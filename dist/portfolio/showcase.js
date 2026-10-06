@@ -272,9 +272,11 @@ export function initShowcase(section, { reducedMotion, onView, onRelease } = {})
     if (!reducedMotion.matches) aim();
   }
 
-  function enter() {
+  // `rising` is false when the section is uncovered from above: it is simply there.
+  function enter(rising = true) {
     if (!section.classList.contains('is-staged')) { prime(); return; }
     const run = ++entrance;
+    if (!rising) { section.classList.remove('is-staged'); prime(); return; }
     section.classList.replace('is-staged', 'is-entering');
     const animations = section.getAnimations({ subtree: true }).filter(animation => 'animationName' in animation);
     Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
